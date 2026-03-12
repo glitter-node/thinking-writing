@@ -1,0 +1,54 @@
+# Environment
+.env
+.env.*
+!.env.example
+auth.json
+
+# Logs
+*.log
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors / IDE
+/.idea
+/.vscode
+/.fleet
+/.zed
+/.nova
+.phpactor.json
+.phpunit.cache
+.phpunit.result.cache
+
+# Composer
+/vendor
+
+# Node
+/node_modules
+/public/build
+/public/hot
+
+# Laravel runtime
+/storage/logs
+/storage/framework/cache
+/storage/framework/sessions
+/storage/framework/views
+/storage/framework/testing
+/storage/debugbar
+/storage/*.key
+/storage/pail
+
+# Public storage symlink
+/public/storage
+
+# Homestead
+Homestead.json
+Homestead.yaml
+
+# Swap / temp
+*.swp
+*.swo

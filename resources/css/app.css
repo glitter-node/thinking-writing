@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    [x-cloak] {
+        display: none !important;
+    }
+
+    body {
+        @apply bg-stone-950 text-stone-100;
+    }
+}
+
+@layer components {
+    .glass-panel {
+        @apply rounded-3xl border border-white/10 bg-white/5 backdrop-blur;
+    }
+
+    .priority-pill {
+        @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.18em];
+    }
+}
+
+.thought-ghost {
+    opacity: 0.35;
+}
+
+.thought-dragging {
+    transform: rotate(2deg);
+}
