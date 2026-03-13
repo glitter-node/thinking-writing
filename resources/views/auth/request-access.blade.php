@@ -19,10 +19,15 @@
         <div class="mt-8 rounded-2xl border border-white/10 bg-black/20 p-5 text-center">
             <p class="text-sm font-medium text-stone-100">Google One Tap Sign-In</p>
             <p class="mt-2 text-sm leading-6 text-stone-300">
-                Sign in instantly with your Google account.
+                Google sign-in reuses an existing account when the verified email already exists.
             </p>
             @if (config('services.google.client_id'))
-                <div id="g_id_onload" class="mt-5"></div>
+                <div
+                    id="google-onetap-root"
+                    class="mt-5"
+                    data-google-client-id="{{ config('services.google.client_id') }}"
+                    data-google-endpoint="{{ route('auth.google-one-tap') }}"
+                ></div>
                 <div id="google-signin-status" class="mt-3 text-sm text-stone-400"></div>
             @else
                 <p class="mt-4 rounded-xl border border-amber-400/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
@@ -33,7 +38,7 @@
 
         <div class="mt-6 rounded-2xl border border-white/10 bg-black/20 p-5">
             <p class="text-sm font-medium text-stone-100">Fallback: email sign-in link.</p>
-            <form method="POST" action="{{ route('auth.email-link') }}" class="mt-4 space-y-4">
+            <form method="POST" action="{{ route('auth.magic-link') }}" class="mt-4 space-y-4">
                 @csrf
                 <div>
                     <label for="email" class="text-sm text-stone-300">Email address</label>
@@ -73,44 +78,6 @@
     @if (config('services.google.client_id'))
         @push('scripts')
             <script src="https://accounts.google.com/gsi/client" async defer></script>
-            <script>
-                function handleCredentialResponse(response) {
-                    const status = document.getElementById('google-signin-status');
-
-                    status.textContent = 'Signing you in...';
-
-                    fetch('{{ route('auth.google') }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                        },
-                        body: JSON.stringify({ credential: response.credential }),
-                    })
-                    .then(async (result) => {
-                        const payload = await result.json();
-
-                        if (!result.ok) {
-                            throw new Error(payload.message || 'Google sign-in failed.');
-                        }
-
-                        window.location.href = payload.redirect;
-                    })
-                    .catch((error) => {
-                        status.textContent = error.message;
-                    });
-                }
-
-                window.addEventListener('load', () => {
-                    google.accounts.id.initialize({
-                        client_id: '{{ config('services.google.client_id') }}',
-                        callback: handleCredentialResponse,
-                    });
-
-                    google.accounts.id.prompt();
-                });
-            </script>
         @endpush
     @endif
 </x-guest-layout>

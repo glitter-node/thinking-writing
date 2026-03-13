@@ -5,68 +5,20 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Mail\MagicLink;
 use App\Models\User;
-use App\Services\GoogleIdentityService;
 use App\Services\MailService;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
-use Throwable;
 
 class AuthController extends Controller
 {
     public function index(): View
     {
         return view('auth.request-access');
-    }
-
-    public function googleLogin(Request $request, GoogleIdentityService $googleIdentityService): JsonResponse|RedirectResponse
-    {
-        $validated = $request->validate([
-            'credential' => ['required', 'string'],
-        ]);
-
-        try {
-            $identity = $googleIdentityService->verifyIdToken($validated['credential']);
-        } catch (Throwable $exception) {
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'message' => 'Unable to verify the Google sign-in token.',
-                ], 422);
-            }
-
-            throw ValidationException::withMessages([
-                'credential' => 'Unable to verify the Google sign-in token.',
-            ]);
-        }
-
-        $user = User::firstOrCreate(
-            ['email' => $identity['email']],
-            [
-                'name' => $identity['name'] ?: $this->defaultNameFromEmail($identity['email']),
-                'password' => Hash::make(Str::random(40)),
-            ]
-        );
-
-        if (! $user->hasVerifiedEmail()) {
-            $user->forceFill(['email_verified_at' => now()])->save();
-        }
-
-        Auth::login($user, true);
-        $request->session()->regenerate();
-
-        $redirect = route('dashboard', absolute: false);
-
-        if ($request->expectsJson()) {
-            return response()->json(['redirect' => $redirect]);
-        }
-
-        return redirect()->intended($redirect);
     }
 
     public function sendMagicLink(Request $request, MailService $mailService): RedirectResponse

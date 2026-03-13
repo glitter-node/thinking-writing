@@ -17,7 +17,7 @@ Repository name: `glitter-thought-board`
 
 ThinkWrite supports two low-friction sign-in paths on the request access screen:
 
-- Google One Tap through `POST /auth/google`
+- Google One Tap through `POST /auth/google/onetap`
 - Email Magic Link fallback through `POST /auth/email-link`
 
 Request access UI:
@@ -29,8 +29,10 @@ Request access UI:
 Google One Tap flow:
 
 - the login page loads Google Identity Services when `GOOGLE_CLIENT_ID` is configured
-- the browser posts the returned credential token to `POST /auth/google`
-- `GoogleIdentityService` verifies the Google ID token, extracts the user identity, and logs the user in
+- the browser posts the returned credential token to `POST /auth/google/onetap`
+- `GoogleIdentityService` verifies the Google ID token through Google's token verification endpoint
+- the backend validates issuer, audience, expiration, and `email_verified`
+- the app reuses an existing user by verified email or creates a new account and starts the Laravel session
 
 Email Magic Link flow:
 

@@ -17,7 +17,7 @@ class MagicLinkLoginTest extends TestCase
     {
         Mail::fake();
 
-        $response = $this->post(route('auth.email-link'), [
+        $response = $this->post(route('auth.magic-link'), [
             'email' => 'magic-user@example.com',
         ]);
 
