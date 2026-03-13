@@ -28,7 +28,7 @@
                     </div>
                 </header>
 
-                <section class="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+                <section class="space-y-8">
                     <div class="space-y-6">
                         <span class="inline-flex rounded-full border border-orange-300/30 bg-orange-300/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-orange-200">Laravel 12 + Blade + Alpine</span>
                         <h1 class="max-w-3xl font-['Space_Grotesk'] text-5xl font-bold leading-tight text-stone-50 sm:text-6xl">
@@ -43,7 +43,7 @@
                         </div>
                     </div>
 
-                    <div class="space-y-6">
+                    <div class="max-w-5xl">
                         <div class="glass-panel overflow-hidden p-4">
                             <div class="rounded-[2rem] border border-white/10 bg-stone-950/70 p-4 shadow-2xl shadow-black/30">
                                 <div class="mb-4 flex items-center justify-between">
