@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use Throwable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Process;
+use Throwable;
 
 class AppVersionService
 {
@@ -15,7 +15,7 @@ class AppVersionService
                 return $this->resolveVersion();
             });
         } catch (Throwable) {
-            return $this->resolveVersion();
+            return $this->fallbackVersion();
         }
     }
 
@@ -44,12 +44,16 @@ class AppVersionService
 
     private function latestGitTag(): ?string
     {
-        $result = Process::path(base_path())->run([
-            'git',
-            'describe',
-            '--tags',
-            '--abbrev=0',
-        ]);
+        try {
+            $result = Process::path(base_path())->run([
+                'git',
+                'describe',
+                '--tags',
+                '--abbrev=0',
+            ]);
+        } catch (Throwable) {
+            return null;
+        }
 
         if ($result->failed()) {
             return null;
@@ -62,12 +66,16 @@ class AppVersionService
 
     private function commitHash(): ?string
     {
-        $result = Process::path(base_path())->run([
-            'git',
-            'rev-parse',
-            '--short',
-            'HEAD',
-        ]);
+        try {
+            $result = Process::path(base_path())->run([
+                'git',
+                'rev-parse',
+                '--short',
+                'HEAD',
+            ]);
+        } catch (Throwable) {
+            return null;
+        }
 
         if ($result->failed()) {
             return null;
@@ -76,5 +84,10 @@ class AppVersionService
         $output = trim($result->output());
 
         return $output !== '' ? $output : null;
+    }
+
+    private function fallbackVersion(): string
+    {
+        return (string) config('version.version', 'dev');
     }
 }
