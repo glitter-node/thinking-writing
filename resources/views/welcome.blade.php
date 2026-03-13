@@ -22,14 +22,12 @@
                             <p class="text-xs uppercase tracking-[0.3em] text-stone-400">Personal idea board</p>
                         </div>
                     </div>
+                    @if(false)
                     <div class="flex items-center gap-3">
-                        @if(false)
                         <a href="{{ route('login') }}" class="rounded-full border border-white/10 px-4 py-2 text-sm text-stone-200 transition hover:border-orange-300/40 hover:text-orange-200">Log in</a>
-                        @endif
-                        @if(false)
                         <a href="{{ route('register') }}" class="rounded-full bg-orange-300 px-4 py-2 text-sm font-semibold text-stone-950 transition hover:bg-orange-200">Start capturing</a>
-                        @endif
                     </div>
+                    @endif
                 </header>
 
                 <section class="space-y-8">
