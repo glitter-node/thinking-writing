@@ -1,20 +1,22 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\GoogleOneTapController;
 use App\Http\Controllers\GraphController;
+use App\Http\Controllers\IdeaLifecycleController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SpaceController;
 use App\Http\Controllers\StreamController;
-use App\Http\Controllers\ThoughtController;
 use App\Http\Controllers\ThoughtCanvasController;
+use App\Http\Controllers\ThoughtController;
 use App\Http\Controllers\ThoughtEmergenceController;
-use App\Http\Controllers\ThoughtExportController;
 use App\Http\Controllers\ThoughtEvolutionController;
+use App\Http\Controllers\ThoughtExportController;
 use App\Http\Controllers\ThoughtGraphController;
-use App\Http\Controllers\IdeaLifecycleController;
-use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ThoughtMoveController;
 use App\Http\Controllers\ThoughtReviewController;
 use App\Http\Controllers\ThoughtSynthesisController;
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -26,6 +28,16 @@ Route::view('/about', 'about')->name('about');
 Route::get('/dashboard', function () {
     return redirect()->route('spaces.index');
 })->middleware('auth')->name('dashboard');
+
+Route::middleware('guest')->group(function () {
+    Route::post('/auth/google/onetap', [GoogleOneTapController::class, 'store'])->name('auth.google.onetap');
+    Route::post('/auth/magic/request', [AuthController::class, 'sendMagicLink'])
+        ->middleware('throttle:6,1')
+        ->name('auth.magic.request');
+    Route::get('/auth/magic/verify', [AuthController::class, 'loginViaMagicLink'])
+        ->middleware(['signed', 'throttle:6,1'])
+        ->name('auth.magic.verify');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/graph', [GraphController::class, 'index'])->name('graph.index');

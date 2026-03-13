@@ -3,6 +3,9 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script>
+            window.GOOGLE_CLIENT_ID = @json(env('GOOGLE_CLIENT_ID'));
+        </script>
         <meta name="application-name" content="Glitter Thought Write">
         <meta name="application-version" content="{{ app_version() }}">
         <meta name="description" content="A personal thinking workspace for capturing and evolving ideas.">
@@ -43,36 +46,40 @@
                         </div>
                     </div>
 
-                    <div class="glass-panel overflow-hidden p-4">
-                        <div class="rounded-[2rem] border border-white/10 bg-stone-950/70 p-4 shadow-2xl shadow-black/30">
-                            <div class="mb-4 flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm uppercase tracking-[0.3em] text-stone-500">Preview</p>
-                                    <h2 class="font-['Space_Grotesk'] text-2xl font-bold text-stone-50">Launch ideas</h2>
-                                </div>
-                                <span class="rounded-full bg-teal-300/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-teal-200">3 streams</span>
-                            </div>
-                            <div class="grid gap-4 md:grid-cols-3">
-                                @foreach ([
-                                    'Inbox' => [['New AI note capture', 'high'], ['Founder memo clean-up', 'medium']],
-                                    'In Progress' => [['Voice note parser', 'high'], ['Tag clustering pass', 'low']],
-                                    'Done' => [['Board search UX', 'medium']],
-                                ] as $streamName => $cards)
-                                    <div class="rounded-3xl border border-white/10 bg-white/5 p-4">
-                                        <div class="mb-3 flex items-center justify-between">
-                                            <h3 class="font-semibold text-stone-100">{{ $streamName }}</h3>
-                                            <span class="text-xs text-stone-500">{{ count($cards) }}</span>
-                                        </div>
-                                        <div class="space-y-3">
-                                            @foreach ($cards as [$title, $priority])
-                                                <div class="rounded-2xl border border-white/10 bg-stone-900/80 p-3">
-                                                    <span class="priority-pill {{ $priority === 'high' ? 'bg-rose-400/15 text-rose-200' : ($priority === 'medium' ? 'bg-amber-300/15 text-amber-200' : 'bg-teal-300/15 text-teal-200') }}">{{ $priority }}</span>
-                                                    <p class="mt-3 text-sm text-stone-200">{{ $title }}</p>
-                                                </div>
-                                            @endforeach
-                                        </div>
+                    <div class="space-y-6">
+                        <x-auth.request-access-card :show-cancel="false" :show-create-account="true" />
+
+                        <div class="glass-panel overflow-hidden p-4">
+                            <div class="rounded-[2rem] border border-white/10 bg-stone-950/70 p-4 shadow-2xl shadow-black/30">
+                                <div class="mb-4 flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm uppercase tracking-[0.3em] text-stone-500">Preview</p>
+                                        <h2 class="font-['Space_Grotesk'] text-2xl font-bold text-stone-50">Launch ideas</h2>
                                     </div>
-                                @endforeach
+                                    <span class="rounded-full bg-teal-300/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-teal-200">3 streams</span>
+                                </div>
+                                <div class="grid gap-4 md:grid-cols-3">
+                                    @foreach ([
+                                        'Inbox' => [['New AI note capture', 'high'], ['Founder memo clean-up', 'medium']],
+                                        'In Progress' => [['Voice note parser', 'high'], ['Tag clustering pass', 'low']],
+                                        'Done' => [['Board search UX', 'medium']],
+                                    ] as $streamName => $cards)
+                                        <div class="rounded-3xl border border-white/10 bg-white/5 p-4">
+                                            <div class="mb-3 flex items-center justify-between">
+                                                <h3 class="font-semibold text-stone-100">{{ $streamName }}</h3>
+                                                <span class="text-xs text-stone-500">{{ count($cards) }}</span>
+                                            </div>
+                                            <div class="space-y-3">
+                                                @foreach ($cards as [$title, $priority])
+                                                    <div class="rounded-2xl border border-white/10 bg-stone-900/80 p-3">
+                                                        <span class="priority-pill {{ $priority === 'high' ? 'bg-rose-400/15 text-rose-200' : ($priority === 'medium' ? 'bg-amber-300/15 text-amber-200' : 'bg-teal-300/15 text-teal-200') }}">{{ $priority }}</span>
+                                                        <p class="mt-3 text-sm text-stone-200">{{ $title }}</p>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
                     </div>

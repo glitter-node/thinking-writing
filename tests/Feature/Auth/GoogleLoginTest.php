@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\AuthIdentity;
 use App\Models\User;
 use App\Services\GoogleOneTapService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -41,6 +42,16 @@ class GoogleLoginTest extends TestCase
             'name' => 'Google User',
         ]);
         $this->assertNotNull(User::where('email', 'google-user@example.com')->value('email_verified_at'));
+        $this->assertDatabaseHas('auth_identities', [
+            'provider' => 'google',
+            'provider_user_id' => 'google-subject',
+            'email' => 'google-user@example.com',
+        ]);
+        $this->assertDatabaseHas('auth_identities', [
+            'provider' => 'email',
+            'provider_user_id' => 'google-user@example.com',
+            'email' => 'google-user@example.com',
+        ]);
     }
 
     public function test_google_login_reuses_existing_user_by_verified_email(): void
@@ -75,5 +86,6 @@ class GoogleLoginTest extends TestCase
         $this->assertEquals(1, User::where('email', 'existing-google@example.com')->count());
         $this->assertEquals('Existing User', $user->fresh()->name);
         $this->assertTrue($user->fresh()->hasVerifiedEmail());
+        $this->assertEquals(1, AuthIdentity::query()->where('provider', 'google')->count());
     }
 }

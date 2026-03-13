@@ -3,7 +3,7 @@ const status = document.getElementById('google-signin-status');
 
 if (root && status) {
     const endpoint = root.dataset.googleEndpoint;
-    const clientId = root.dataset.googleClientId;
+    const clientId = window.GOOGLE_CLIENT_ID || root.dataset.googleClientId;
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
     const updateStatus = (message) => {
@@ -78,6 +78,19 @@ if (root && status) {
     let attempts = 0;
     const maxAttempts = 20;
 
+    const loadGoogleScript = () => {
+        if (document.querySelector('script[data-google-one-tap]')) {
+            return;
+        }
+
+        const script = document.createElement('script');
+        script.src = 'https://accounts.google.com/gsi/client';
+        script.async = true;
+        script.defer = true;
+        script.dataset.googleOneTap = 'true';
+        document.head.appendChild(script);
+    };
+
     const waitForGoogle = () => {
         attempts += 1;
 
@@ -94,5 +107,8 @@ if (root && status) {
         window.setTimeout(waitForGoogle, 250);
     };
 
-    window.addEventListener('load', waitForGoogle);
+    window.addEventListener('load', () => {
+        loadGoogleScript();
+        waitForGoogle();
+    });
 }

@@ -14,8 +14,8 @@ class ContentSecurityPolicy
 
         $policy = implode('; ', [
             "default-src 'self'",
-            "script-src 'self' https://accounts.google.com",
-            "style-src 'self' 'unsafe-inline' https://fonts.bunny.net",
+            "script-src 'self' 'unsafe-inline' https://accounts.google.com",
+            "style-src 'self' 'unsafe-inline' https://fonts.bunny.net https://accounts.google.com",
             "font-src 'self' https://fonts.bunny.net data:",
             "img-src 'self' data: https:",
             "connect-src 'self' https://accounts.google.com",

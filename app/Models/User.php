@@ -4,11 +4,11 @@ namespace App\Models;
 
 use App\Domain\Space\Models\Space;
 use App\Domain\Thought\Models\Thought;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Database\Factories\UserFactory;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -59,5 +59,10 @@ class User extends Authenticatable implements MustVerifyEmailContract
     public function thoughts(): HasMany
     {
         return $this->hasMany(Thought::class);
+    }
+
+    public function authIdentities(): HasMany
+    {
+        return $this->hasMany(AuthIdentity::class);
     }
 }
