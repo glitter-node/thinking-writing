@@ -14,17 +14,13 @@
     <body class="font-['DM_Sans'] antialiased">
         <div class="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(251,146,60,0.28),_transparent_26%),radial-gradient(circle_at_80%_20%,_rgba(20,184,166,0.2),_transparent_24%),linear-gradient(180deg,_#1c1917,_#09090b)] px-4 py-8 text-stone-100 sm:px-6 lg:px-8">
             <div class="mx-auto flex max-w-7xl flex-col gap-12">
-                <header class="flex items-center justify-between">
+                <header class="flex items-center">
                     <div class="flex items-center gap-3">
                         <x-application-logo class="h-10 w-10 text-orange-300" />
                         <div>
                             <p class="font-['Space_Grotesk'] text-lg font-bold tracking-[0.08em]">Glitter Thought Write</p>
                             <p class="text-xs uppercase tracking-[0.3em] text-stone-400">Personal idea board</p>
                         </div>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <a href="{{ route('login') }}" class="rounded-full border border-white/10 px-4 py-2 text-sm text-stone-200 transition hover:border-orange-300/40 hover:text-orange-200">Log in</a>
-                        <a href="{{ route('register') }}" class="rounded-full bg-orange-300 px-4 py-2 text-sm font-semibold text-stone-950 transition hover:bg-orange-200">Start capturing</a>
                     </div>
                 </header>
 
