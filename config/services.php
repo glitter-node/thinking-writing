@@ -34,9 +34,4 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-
-    'google' => [
-        'client_id' => env('GOOGLE_CLIENT_ID'),
-    ],
-
 ];

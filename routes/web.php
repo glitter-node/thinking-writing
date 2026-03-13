@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Auth\GoogleOneTapController;
 use App\Http\Controllers\GraphController;
 use App\Http\Controllers\IdeaLifecycleController;
 use App\Http\Controllers\ProfileController;
@@ -28,16 +26,6 @@ Route::view('/about', 'about')->name('about');
 Route::get('/dashboard', function () {
     return redirect()->route('spaces.index');
 })->middleware('auth')->name('dashboard');
-
-Route::middleware('guest')->group(function () {
-    Route::post('/auth/google/onetap', [GoogleOneTapController::class, 'store'])->name('auth.google.onetap');
-    Route::post('/auth/magic/request', [AuthController::class, 'sendMagicLink'])
-        ->middleware('throttle:6,1')
-        ->name('auth.magic.request');
-    Route::get('/auth/magic/verify', [AuthController::class, 'loginViaMagicLink'])
-        ->middleware(['signed', 'throttle:6,1'])
-        ->name('auth.magic.verify');
-});
 
 Route::middleware('auth')->group(function () {
     Route::get('/graph', [GraphController::class, 'index'])->name('graph.index');

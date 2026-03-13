@@ -3,9 +3,6 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script>
-            window.GOOGLE_CLIENT_ID = @json(env('GOOGLE_CLIENT_ID'));
-        </script>
         <meta name="application-name" content="Glitter Thought Write">
         <meta name="application-version" content="{{ app_version() }}">
         <meta name="description" content="A personal thinking workspace for capturing and evolving ideas.">
@@ -47,7 +44,23 @@
                     </div>
 
                     <div class="space-y-6">
-                        <x-auth.request-access-card :show-cancel="false" :show-create-account="true" />
+                        <div class="w-full rounded-3xl border border-white/10 bg-white/[0.04] p-8 shadow-2xl shadow-black/20">
+                            <div class="space-y-3 text-center">
+                                <p class="text-xs uppercase tracking-[0.24em] text-orange-200">Glitter Thought Write</p>
+                                <h2 class="font-['Space_Grotesk'] text-3xl font-bold text-stone-100">Open your workspace</h2>
+                                <p class="text-sm leading-6 text-stone-300">
+                                    Sign in with your account or create a new workspace to start capturing ideas.
+                                </p>
+                            </div>
+                            <div class="mt-8 grid gap-3 sm:grid-cols-2">
+                                <a href="{{ route('login') }}" class="rounded-2xl border border-white/10 px-4 py-3 text-center text-sm font-semibold text-stone-100 transition hover:border-orange-300/40 hover:text-orange-200">
+                                    Log in
+                                </a>
+                                <a href="{{ route('register') }}" class="rounded-2xl bg-orange-400 px-4 py-3 text-center text-sm font-semibold text-stone-950 transition hover:bg-orange-300">
+                                    Create account
+                                </a>
+                            </div>
+                        </div>
 
                         <div class="glass-panel overflow-hidden p-4">
                             <div class="rounded-[2rem] border border-white/10 bg-stone-950/70 p-4 shadow-2xl shadow-black/30">

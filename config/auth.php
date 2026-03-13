@@ -113,10 +113,4 @@ return [
     */
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
-
-    'magic_links' => [
-        'secret' => env('MAGIC_LINK_SECRET', env('APP_KEY')),
-        'expire_minutes' => (int) env('MAGIC_LINK_EXPIRE_MINUTES', 10),
-    ],
-
 ];

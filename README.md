@@ -13,37 +13,17 @@ Repository name: `glitter-thought-board`
 - Sortable.js
 - Laravel Breeze
 
-## Authentication Methods
+## Authentication
 
-ThinkWrite supports two low-friction sign-in paths on the request access screen:
+ThinkWrite uses Laravel Breeze for its account authentication flow.
 
-- Google One Tap through `POST /auth/google/onetap`
-- Email Magic Link fallback through `POST /auth/email-link`
-
-Request access UI:
+Guest entry points:
 
 - `GET /login`
-- `GET /auth`
-- `resources/views/auth/request-access.blade.php`
+- `GET /register`
 
-Google One Tap flow:
+Email templates:
 
-- the login page loads Google Identity Services when `GOOGLE_CLIENT_ID` is configured
-- the browser posts the returned credential token to `POST /auth/google/onetap`
-- `GoogleIdentityService` verifies the Google ID token through Google's token verification endpoint
-- the backend validates issuer, audience, expiration, and `email_verified`
-- the app reuses an existing user by verified email or creates a new account and starts the Laravel session
-
-Email Magic Link flow:
-
-- the fallback form accepts an email address
-- ThinkWrite creates or finds the user account
-- the app sends a 10 minute signed login URL through the mail system
-- `GET /auth/magic/{token}` validates the signed URL, authenticates the user, and redirects to the dashboard
-
-Mail templates:
-
-- `resources/views/emails/magic-link.blade.php`
 - `resources/views/emails/verify.blade.php`
 
 ## Email System

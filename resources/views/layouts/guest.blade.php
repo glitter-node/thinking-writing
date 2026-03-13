@@ -4,9 +4,6 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <script>
-            window.GOOGLE_CLIENT_ID = @json(env('GOOGLE_CLIENT_ID'));
-        </script>
         <meta name="application-name" content="Glitter Thought Write">
         <meta name="application-version" content="{{ app_version() }}">
         <meta name="description" content="A personal thinking workspace for capturing and evolving ideas.">

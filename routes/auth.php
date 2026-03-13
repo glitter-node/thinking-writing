@@ -1,11 +1,9 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
-use App\Http\Controllers\Auth\GoogleOneTapController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
@@ -14,44 +12,15 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
-    Route::get('auth', [AuthController::class, 'index'])
-        ->name('auth.request');
-
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 
     Route::post('register', [RegisteredUserController::class, 'store']);
 
-    Route::get('login', [AuthController::class, 'index'])
+    Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
-
-    Route::post('auth/google', [GoogleOneTapController::class, 'store'])
-        ->name('auth.google');
-
-    Route::post('auth/google-one-tap', [GoogleOneTapController::class, 'store'])
-        ->name('auth.google-one-tap');
-
-    Route::post('auth/email/magic-link/request', [AuthController::class, 'sendMagicLink'])
-        ->middleware('throttle:6,1')
-        ->name('auth.email.magic-link.request');
-
-    Route::get('auth/email/magic-link/verify', [AuthController::class, 'loginViaMagicLink'])
-        ->middleware(['signed', 'throttle:6,1'])
-        ->name('auth.email.magic-link.verify');
-
-    Route::post('auth/email-link', [AuthController::class, 'sendMagicLink'])
-        ->middleware('throttle:6,1')
-        ->name('auth.email-link');
-
-    Route::post('auth/magic-link', [AuthController::class, 'sendMagicLink'])
-        ->middleware('throttle:6,1')
-        ->name('auth.magic-link');
-
-    Route::get('auth/magic/{token?}', [AuthController::class, 'loginViaMagicLink'])
-        ->middleware(['signed', 'throttle:6,1'])
-        ->name('auth.magic');
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
         ->name('password.request');
