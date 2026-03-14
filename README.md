@@ -857,6 +857,8 @@ These indexes support:
 - `resources/js/graph.js` contains graph rendering and exploration
 - `resources/js/canvas.js` contains spatial canvas interactions
 
+---
+
 ## Setup
 
 ```bash
@@ -867,6 +869,8 @@ php artisan migrate
 npm install
 npm run build
 ```
+
+---
 
 ## Run
 
@@ -879,6 +883,8 @@ In another shell:
 ```bash
 npm run dev
 ```
+
+---
 
 ## Tests
 
