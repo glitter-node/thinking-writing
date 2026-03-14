@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -38,7 +38,7 @@
                                 Capture thoughts. Connect them. Watch ideas evolve.
                             </h1>
                             <p class="max-w-2xl text-lg text-stone-300">
-                                ThinkWrite turns scattered notes into a living thought graph. Link ideas, see relationships, and move from raw fragments to structured knowledge.
+                                Turn scattered notes into a living knowledge graph.
                             </p>
                             <div class="flex flex-wrap gap-3">
                                 <a href="{{ route('register') }}" class="rounded-full bg-orange-300 px-6 py-3 font-semibold text-stone-950 transition hover:bg-orange-200">Start your graph</a>
@@ -48,12 +48,31 @@
 
                         <div class="glass-panel min-w-0 p-6">
                             <p class="text-xs uppercase tracking-[0.3em] text-stone-500">Thinking model</p>
-                            <div class="mt-5 grid gap-3 text-center text-xs font-semibold uppercase tracking-[0.22em] text-stone-300 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)] sm:items-center">
-                                <div class="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-4">Thought</div>
-                                <span class="text-orange-200">→</span>
-                                <div class="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-4">Link</div>
-                                <span class="text-orange-200">→</span>
-                                <div class="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-4">Graph</div>
+                            <div class="mt-5 rounded-[1.5rem] border border-white/10 bg-stone-950/60 p-4">
+                                <div class="flex justify-center overflow-x-auto">
+                                    <svg
+                                        width="260"
+                                        height="120"
+                                        viewBox="0 0 260 120"
+                                        class="h-auto w-full max-w-[260px] text-xs"
+                                        aria-label="Thinking model graph preview"
+                                        role="img"
+                                    >
+                                        <line x1="40" y1="40" x2="120" y2="40" stroke="#6ea8ff" stroke-opacity="0.75" />
+                                        <line x1="120" y1="40" x2="90" y2="80" stroke="#6ea8ff" stroke-opacity="0.75" />
+                                        <line x1="120" y1="40" x2="180" y2="80" stroke="#6ea8ff" stroke-opacity="0.75" />
+
+                                        <circle cx="40" cy="40" r="8" fill="#1f2937" stroke="rgba(255,255,255,0.12)" />
+                                        <circle cx="120" cy="40" r="8" fill="#1f2937" stroke="rgba(255,255,255,0.12)" />
+                                        <circle cx="90" cy="80" r="8" fill="#1f2937" stroke="rgba(255,255,255,0.12)" />
+                                        <circle cx="180" cy="80" r="8" fill="#1f2937" stroke="rgba(255,255,255,0.12)" />
+
+                                        <text x="40" y="26" fill="#e7e5e4" font-size="10" text-anchor="middle">Thought A</text>
+                                        <text x="120" y="26" fill="#e7e5e4" font-size="10" text-anchor="middle">Thought B</text>
+                                        <text x="90" y="102" fill="#e7e5e4" font-size="10" text-anchor="middle">Insight</text>
+                                        <text x="180" y="102" fill="#e7e5e4" font-size="10" text-anchor="middle">Project</text>
+                                    </svg>
+                                </div>
                             </div>
                             <p class="mt-5 text-sm leading-6 text-stone-400">
                                 Capture one thought at a time, connect what matters, and let larger patterns emerge from the network.
@@ -79,6 +98,11 @@
                                     <span class="rounded-full border border-orange-300/20 bg-orange-300/10 px-4 py-2 text-orange-200">Connect</span>
                                     <span class="rounded-full border border-teal-300/20 bg-teal-300/10 px-4 py-2 text-teal-200">Evolve</span>
                                 </div>
+                                <div class="grid gap-2 text-sm text-stone-400 sm:grid-cols-3">
+                                    <p><span class="text-stone-200">Capture</span> → write a thought</p>
+                                    <p><span class="text-orange-200">Connect</span> → link related ideas</p>
+                                    <p><span class="text-teal-200">Evolve</span> → turn insights into projects</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -99,7 +123,7 @@
                                 </div>
                                 <div class="mt-4 space-y-2">
                                     <p class="text-xs uppercase tracking-[0.28em] text-orange-200">Graph View</p>
-                                    <h3 class="font-['Space_Grotesk'] text-2xl font-bold text-stone-50">Relationships first</h3>
+                                    <h3 class="font-['Space_Grotesk'] text-2xl font-bold text-stone-50">See how ideas connect</h3>
                                     <p class="text-sm leading-6 text-stone-400">See how ideas connect, branch, and converge into larger structures.</p>
                                 </div>
                             </article>
@@ -163,17 +187,35 @@
                         </div>
                         <div class="glass-panel p-6">
                             <p class="text-xs uppercase tracking-[0.28em] text-teal-200">Links</p>
-                            <h3 class="mt-3 font-['Space_Grotesk'] text-2xl font-bold text-stone-50">Connections create meaning</h3>
+                            <h3 class="mt-3 font-['Space_Grotesk'] text-2xl font-bold text-stone-50">Ideas become networks</h3>
                             <p class="mt-3 text-sm leading-6 text-stone-400">Relationships between thoughts reveal context, tension, and paths worth exploring.</p>
                         </div>
                         <div class="glass-panel p-6">
                             <p class="text-xs uppercase tracking-[0.28em] text-stone-300">Evolution</p>
-                            <h3 class="mt-3 font-['Space_Grotesk'] text-2xl font-bold text-stone-50">Knowledge emerges over time</h3>
+                            <h3 class="mt-3 font-['Space_Grotesk'] text-2xl font-bold text-stone-50">Ideas evolve into knowledge</h3>
                             <p class="mt-3 text-sm leading-6 text-stone-400">ThinkWrite helps ideas mature from fragments into connected understanding.</p>
                         </div>
                     </div>
+
+                    <section class="glass-panel space-y-5 p-6">
+                        <div class="max-w-3xl space-y-3">
+                            <p class="text-xs uppercase tracking-[0.3em] text-stone-500">Architecture</p>
+                            <h2 class="font-['Space_Grotesk'] text-3xl font-bold text-stone-50 sm:text-4xl">Thought Domain Event Architecture</h2>
+                            <p class="text-base leading-7 text-stone-300">
+                                The thought lifecycle is event-driven. Create, placeholder, evolution, synthesis, link, and delete actions dispatch domain events that update versions, activity logs, graph indexes, tag indexes, and cooccurrence signals without concentrating all of that work in one service.
+                            </p>
+                            <p class="text-sm leading-6 text-stone-400">
+                                This architecture ensures every change in your thinking automatically updates your knowledge graph.
+                            </p>
+                        </div>
+
+                        <div class="flex justify-center overflow-x-auto rounded-[1.75rem] border border-white/10 bg-stone-950/70 p-4 shadow-[0_0_60px_rgba(99,102,241,0.08)]">
+                            <pre class="mermaid min-h-[360px] w-full text-sm text-stone-200" id="thought-domain-event-flow"></pre>
+                        </div>
+                    </section>
                 </section>
             </div>
         </div>
+        <script type="module" src="{{ asset('js/architecture-diagrams.js') }}"></script>
     </body>
 </html>

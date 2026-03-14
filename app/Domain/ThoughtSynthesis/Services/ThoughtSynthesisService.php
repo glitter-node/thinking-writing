@@ -3,14 +3,10 @@
 namespace App\Domain\ThoughtSynthesis\Services;
 
 use App\Domain\Space\Models\Space;
+use App\Domain\Thought\Events\ThoughtSynthesized;
 use App\Domain\Thought\Models\Thought;
 use App\Domain\Thought\Repositories\ThoughtRepository;
-use App\Domain\ThoughtEmergence\Services\ThoughtEmergenceService;
-use App\Domain\Thought\Services\ThoughtGraphIndexService;
-use App\Domain\Thought\Services\ThoughtLinkService;
 use App\Domain\Thought\Services\ThoughtService;
-use App\Domain\ThoughtEvent\Services\ThoughtEventService;
-use App\Domain\ThoughtVersion\Services\ThoughtVersionService;
 use App\Domain\ThoughtSynthesis\Repositories\ThoughtSynthesisRepository;
 use App\Models\User;
 use Illuminate\Support\Collection;
@@ -22,12 +18,7 @@ class ThoughtSynthesisService
     public function __construct(
         private readonly ThoughtRepository $thoughtRepository,
         private readonly ThoughtSynthesisRepository $thoughtSynthesisRepository,
-        private readonly ThoughtLinkService $thoughtLinkService,
         private readonly ThoughtService $thoughtService,
-        private readonly ThoughtGraphIndexService $thoughtGraphIndexService,
-        private readonly ThoughtEmergenceService $thoughtEmergenceService,
-        private readonly ThoughtVersionService $thoughtVersionService,
-        private readonly ThoughtEventService $thoughtEventService,
     ) {
     }
 
@@ -63,25 +54,26 @@ class ThoughtSynthesisService
                 'position' => $this->thoughtRepository->nextPositionForStream($stream),
             ]);
 
-            $thought = $this->thoughtLinkService->createLinks($thought);
-            $this->thoughtVersionService->createInitialVersion($thought);
-            $this->thoughtEventService->recordEvent($thought, 'ThoughtCreated', ['source' => 'synthesis']);
-            $this->thoughtEventService->recordEvent($thought, 'ThoughtLinked', ['source' => 'synthesis']);
-            $this->thoughtEmergenceService->updateThoughtIndexes($thought);
+            $thought = $this->thoughtService->syncLinks(
+                $thought,
+                'synthesis',
+                fn (Thought $sourceThought, string $label): Thought => $this->thoughtService->createPlaceholder(
+                    $sourceThought->stream,
+                    $sourceThought->user,
+                    $label,
+                ),
+            );
 
             $synthesis = $this->thoughtSynthesisRepository->create($user->id, $thought);
             $this->thoughtSynthesisRepository->createItems($synthesis, $sourceThoughts->pluck('id')->all());
-            $this->thoughtEventService->recordEvent($thought, 'ThoughtSynthesized', [
-                'source_thought_ids' => $sourceThoughts->pluck('id')->all(),
-            ]);
-            $this->thoughtGraphIndexService->updateGraphIndex($thought->id);
-
-            foreach ($sourceThoughts as $sourceThought) {
-                $this->thoughtGraphIndexService->updateGraphIndex($sourceThought->id);
-            }
-
-            $this->thoughtEmergenceService->calculateCooccurrence($user->id);
-            $this->thoughtService->recordThinkingMomentum($user->id);
+            event(new ThoughtSynthesized(
+                $thought->id,
+                $thought->stream->space_id,
+                $thought->user_id,
+                $thought->stream_id,
+                $sourceThoughts->pluck('id')->map(fn ($id): int => (int) $id)->all(),
+            ));
+            $this->thoughtService->dispatchThoughtLinked($thought, 'synthesis');
 
             return $this->thoughtRepository->refreshWithRelations($thought, [
                 'stream.space',

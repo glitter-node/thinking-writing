@@ -2,15 +2,15 @@
 
 namespace App\Domain\Thought\Services;
 
+use App\Domain\Thought\Events\ThoughtCreated;
+use App\Domain\Thought\Events\ThoughtDeleted;
+use App\Domain\Thought\Events\ThoughtLinked;
+use App\Domain\Thought\Events\ThoughtPlaceholderCreated;
 use App\Domain\Space\Models\Space;
 use App\Domain\Stream\Models\Stream;
-use App\Domain\ThoughtEmergence\Services\ThoughtEmergenceService;
 use App\Domain\Stream\Repositories\StreamRepository;
-use App\Domain\ThinkingSession\Services\ThinkingSessionService;
 use App\Domain\Thought\Models\Thought;
 use App\Domain\Thought\Repositories\ThoughtRepository;
-use App\Domain\ThoughtEvent\Services\ThoughtEventService;
-use App\Domain\ThoughtVersion\Services\ThoughtVersionService;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -22,10 +22,6 @@ class ThoughtService
         private readonly ThoughtRepository $thoughtRepository,
         private readonly StreamRepository $streamRepository,
         private readonly ThoughtLinkService $thoughtLinkService,
-        private readonly ThinkingSessionService $thinkingSessionService,
-        private readonly ThoughtEmergenceService $thoughtEmergenceService,
-        private readonly ThoughtVersionService $thoughtVersionService,
-        private readonly ThoughtEventService $thoughtEventService,
     ) {
     }
 
@@ -41,13 +37,15 @@ class ThoughtService
                 'position' => $this->thoughtRepository->nextPositionForStream($stream),
             ]);
 
-            $thought = $this->thoughtLinkService->createLinks($thought);
-            $this->thoughtVersionService->createInitialVersion($thought);
-            $this->thoughtEventService->recordEvent($thought, 'ThoughtCreated', ['source' => 'standard']);
-            $this->thoughtEventService->recordEvent($thought, 'ThoughtLinked', ['source' => 'standard']);
-            $this->thoughtEmergenceService->updateThoughtIndexes($thought);
-            $this->thoughtEmergenceService->calculateCooccurrence($user->id);
-            $this->thinkingSessionService->recordThought($user->id);
+            $thought = $this->syncLinks($thought, 'standard');
+            event(new ThoughtCreated(
+                $thought->id,
+                $thought->stream->space_id,
+                $thought->user_id,
+                $thought->stream_id,
+                'standard',
+            ));
+            $this->dispatchThoughtLinked($thought, 'standard');
 
             return $thought;
         });
@@ -62,16 +60,8 @@ class ThoughtService
                 'tags' => $this->normalizeTags($data['tags'] ?? ''),
             ]);
 
-            $thought = $this->thoughtLinkService->updateLinks($thought);
-            $this->thoughtVersionService->createInitialVersion($thought);
-            $this->thoughtVersionService->createVersion($thought, $data['content']);
-            $this->thoughtEventService->recordEvent($thought, 'ThoughtEdited', [
-                'priority' => $data['priority'],
-                'tags' => $this->normalizeTags($data['tags'] ?? ''),
-            ]);
-            $this->thoughtEventService->recordEvent($thought, 'ThoughtLinked', ['source' => 'update']);
-            $this->thoughtEmergenceService->updateThoughtIndexes($thought);
-            $this->thoughtEmergenceService->calculateCooccurrence($thought->user_id);
+            $thought = $this->syncLinks($thought, 'update');
+            $this->dispatchThoughtLinked($thought, 'update');
 
             return $thought;
         });
@@ -84,8 +74,14 @@ class ThoughtService
             $deletedPosition = $thought->position;
 
             $this->thoughtRepository->delete($thought);
-            $this->thoughtEventService->recordEvent($thought, 'ThoughtArchived', ['stream_id' => $stream->id]);
             $this->thoughtRepository->decrementPositionsAfter($stream, $deletedPosition);
+            event(new ThoughtDeleted(
+                $thought->id,
+                $stream->space_id,
+                $thought->user_id,
+                $stream->id,
+                $deletedPosition,
+            ));
         });
     }
 
@@ -111,13 +107,15 @@ class ThoughtService
                 'position' => 1,
             ]);
 
-            $thought = $this->thoughtLinkService->createLinks($thought);
-            $this->thoughtVersionService->createInitialVersion($thought);
-            $this->thoughtEventService->recordEvent($thought, 'ThoughtCreated', ['source' => 'quick']);
-            $this->thoughtEventService->recordEvent($thought, 'ThoughtLinked', ['source' => 'quick']);
-            $this->thoughtEmergenceService->updateThoughtIndexes($thought);
-            $this->thoughtEmergenceService->calculateCooccurrence($user->id);
-            $this->thinkingSessionService->recordThought($user->id);
+            $thought = $this->syncLinks($thought, 'quick');
+            event(new ThoughtCreated(
+                $thought->id,
+                $thought->stream->space_id,
+                $thought->user_id,
+                $thought->stream_id,
+                'quick',
+            ));
+            $this->dispatchThoughtLinked($thought, 'quick');
 
             return $thought;
         });
@@ -174,9 +172,57 @@ class ThoughtService
             ->all();
     }
 
-    public function recordThinkingMomentum(int $userId): void
+    public function createPlaceholder(Stream $stream, User $user, string $content): Thought
     {
-        $this->thinkingSessionService->recordThought($userId);
+        return DB::transaction(function () use ($stream, $user, $content): Thought {
+            $thought = $this->thoughtRepository->createForStream($stream, [
+                'user_id' => $user->id,
+                'parent_id' => null,
+                'content' => $content,
+                'priority' => 'low',
+                'tags' => ['placeholder'],
+                'position' => $this->thoughtRepository->nextPositionForStream($stream),
+            ]);
+
+            $thought = $this->syncLinks($thought, 'placeholder');
+            event(new ThoughtPlaceholderCreated(
+                $thought->id,
+                $thought->stream->space_id,
+                $thought->user_id,
+                $thought->stream_id,
+            ));
+            $this->dispatchThoughtLinked($thought, 'placeholder');
+
+            return $thought;
+        });
+    }
+
+    public function syncLinks(Thought $thought, string $source, ?callable $missingThoughtCreator = null): Thought
+    {
+        return $source === 'update'
+            ? $this->thoughtLinkService->updateLinks($thought, $missingThoughtCreator ?? $this->placeholderCreator())
+            : $this->thoughtLinkService->createLinks($thought, $missingThoughtCreator ?? $this->placeholderCreator());
+    }
+
+    private function placeholderCreator(): callable
+    {
+        return fn (Thought $sourceThought, string $label): Thought => $this->createPlaceholder(
+            $sourceThought->stream,
+            $sourceThought->user,
+            $label,
+        );
+    }
+
+    public function dispatchThoughtLinked(Thought $thought, string $source): void
+    {
+        event(new ThoughtLinked(
+            $thought->id,
+            $thought->stream->space_id,
+            $thought->user_id,
+            $thought->stream_id,
+            $thought->outgoingLinks->pluck('target_thought_id')->map(fn ($id): int => (int) $id)->values()->all(),
+            $source,
+        ));
     }
 
     private function persistSequence(Stream $stream, Collection $thoughts): void

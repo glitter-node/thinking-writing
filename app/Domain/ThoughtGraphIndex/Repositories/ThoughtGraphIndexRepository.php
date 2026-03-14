@@ -4,6 +4,7 @@ namespace App\Domain\ThoughtGraphIndex\Repositories;
 
 use App\Domain\ThoughtGraphIndex\Models\ThoughtGraphIndex;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as SupportCollection;
 
 class ThoughtGraphIndexRepository
 {
@@ -46,6 +47,20 @@ class ThoughtGraphIndexRepository
             ->where('depth', 1)
             ->orderBy('linked_thought_id')
             ->get();
+    }
+
+    public function relatedThoughtIdsForThought(int $thoughtId): SupportCollection
+    {
+        return ThoughtGraphIndex::query()
+            ->where('thought_id', $thoughtId)
+            ->orWhere('linked_thought_id', $thoughtId)
+            ->get(['thought_id', 'linked_thought_id'])
+            ->flatMap(fn (ThoughtGraphIndex $row): array => [
+                (int) $row->thought_id,
+                (int) $row->linked_thought_id,
+            ])
+            ->unique()
+            ->values();
     }
 
     public function truncate(): void

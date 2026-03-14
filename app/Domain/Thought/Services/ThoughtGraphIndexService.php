@@ -33,10 +33,7 @@ class ThoughtGraphIndexService
             ->values()
             ->all();
 
-        DB::transaction(function () use ($adjacencyMap, $impactedThoughtIds): void {
-            $this->thoughtGraphIndexRepository->deleteForThoughtIds($impactedThoughtIds);
-            $this->thoughtGraphIndexRepository->insertRows($this->buildRowsForThoughtIds($adjacencyMap, $impactedThoughtIds));
-        });
+        $this->refreshThoughtIds($adjacencyMap, $impactedThoughtIds);
 
         $this->flushGraphCache($impactedThoughtIds);
     }
@@ -54,6 +51,25 @@ class ThoughtGraphIndexService
         $this->flushGraphCache($thoughtIds);
     }
 
+    public function refreshForDeletedThought(int $thoughtId): void
+    {
+        $impactedThoughtIds = $this->thoughtGraphIndexRepository
+            ->relatedThoughtIdsForThought($thoughtId)
+            ->reject(fn (int $id): bool => $id === $thoughtId)
+            ->values()
+            ->all();
+
+        if ($impactedThoughtIds === []) {
+            $this->flushGraphCache([$thoughtId]);
+
+            return;
+        }
+
+        $adjacencyMap = $this->buildAdjacencyMap();
+        $this->refreshThoughtIds($adjacencyMap, $impactedThoughtIds);
+        $this->flushGraphCache([...$impactedThoughtIds, $thoughtId]);
+    }
+
     public function getConnectedThoughts(int $thoughtId, int $maxDepth = 2): Collection
     {
         $depth = max(1, min($maxDepth, self::MAX_DEPTH));
@@ -61,27 +77,29 @@ class ThoughtGraphIndexService
 
         try {
             return collect(Cache::store('redis')->remember($cacheKey, now()->addHour(), function () use ($thoughtId, $depth) {
-                $rows = $this->thoughtGraphIndexRepository->neighborsForThought($thoughtId, $depth);
-
-                if ($rows->isEmpty()) {
-                    $this->updateGraphIndex($thoughtId);
-                    $rows = $this->thoughtGraphIndexRepository->neighborsForThought($thoughtId, $depth);
-                }
-
-                return $this->formatNeighbors($rows);
+                return $this->formatNeighbors(
+                    $this->thoughtGraphIndexRepository->neighborsForThought($thoughtId, $depth),
+                );
             }));
         } catch (Throwable) {
             return collect(Cache::remember($cacheKey.':fallback', now()->addMinutes(15), function () use ($thoughtId, $depth) {
-                $rows = $this->thoughtGraphIndexRepository->neighborsForThought($thoughtId, $depth);
-
-                if ($rows->isEmpty()) {
-                    $this->updateGraphIndex($thoughtId);
-                    $rows = $this->thoughtGraphIndexRepository->neighborsForThought($thoughtId, $depth);
-                }
-
-                return $this->formatNeighbors($rows);
+                return $this->formatNeighbors(
+                    $this->thoughtGraphIndexRepository->neighborsForThought($thoughtId, $depth),
+                );
             }));
         }
+    }
+
+    private function refreshThoughtIds(array $adjacencyMap, array $thoughtIds): void
+    {
+        if ($thoughtIds === []) {
+            return;
+        }
+
+        DB::transaction(function () use ($adjacencyMap, $thoughtIds): void {
+            $this->thoughtGraphIndexRepository->deleteForThoughtIds($thoughtIds);
+            $this->thoughtGraphIndexRepository->insertRows($this->buildRowsForThoughtIds($adjacencyMap, $thoughtIds));
+        });
     }
 
     private function buildRowsForThoughtIds(array $adjacencyMap, array $thoughtIds): array

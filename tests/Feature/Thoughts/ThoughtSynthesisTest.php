@@ -51,6 +51,39 @@ class ThoughtSynthesisTest extends TestCase
         $this->assertDatabaseHas('thought_synthesis_items', [
             'thought_id' => $thoughtB->id,
         ]);
+        $this->assertDatabaseHas('thought_versions', [
+            'thought_id' => $synthesizedThought->id,
+            'version' => 1,
+            'content' => 'Synthesized idea',
+        ]);
+        $this->assertDatabaseHas('thought_events', [
+            'thought_id' => $synthesizedThought->id,
+            'event_type' => 'ThoughtCreated',
+        ]);
+        $this->assertDatabaseHas('thought_events', [
+            'thought_id' => $synthesizedThought->id,
+            'event_type' => 'ThoughtSynthesized',
+        ]);
+        $this->assertDatabaseHas('thought_graph_index', [
+            'thought_id' => $synthesizedThought->id,
+            'linked_thought_id' => $thoughtA->id,
+            'link_type' => 'synthesis',
+            'depth' => 1,
+        ]);
+        $this->assertDatabaseHas('thought_graph_index', [
+            'thought_id' => $thoughtA->id,
+            'linked_thought_id' => $synthesizedThought->id,
+            'link_type' => 'synthesis',
+            'depth' => 1,
+        ]);
+        $this->assertDatabaseHas('thought_tag_index', [
+            'thought_id' => $synthesizedThought->id,
+            'tag' => 'systems',
+        ]);
+        $this->assertDatabaseHas('thought_tag_index', [
+            'thought_id' => $synthesizedThought->id,
+            'tag' => 'review',
+        ]);
 
         $this->actingAs($user)
             ->get(route('spaces.show', $space))

@@ -44,4 +44,28 @@ class GraphCacheTest extends TestCase
 
         $this->assertFalse(Cache::has($cacheKey));
     }
+
+    public function test_graph_reads_do_not_rebuild_missing_index_rows(): void
+    {
+        Cache::flush();
+
+        $user = User::factory()->create();
+        $space = Space::factory()->for($user)->create();
+        $stream = Stream::factory()->for($space)->create(['position' => 1]);
+        $thought = Thought::factory()->for($user)->for($stream)->create([
+            'content' => 'Read only graph node',
+            'position' => 1,
+        ]);
+
+        $this->assertDatabaseCount('thought_graph_index', 0);
+
+        $this->actingAs($user)
+            ->getJson(route('thoughts.graph', $thought).'?depth=2')
+            ->assertOk()
+            ->assertJsonPath('thought.id', $thought->id)
+            ->assertJsonCount(1, 'nodes')
+            ->assertJsonCount(0, 'edges');
+
+        $this->assertDatabaseCount('thought_graph_index', 0);
+    }
 }

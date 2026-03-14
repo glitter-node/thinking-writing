@@ -17,13 +17,18 @@ class ThoughtTagIndexRepository
             return;
         }
 
-        ThoughtTagIndex::query()->insert(
+            ThoughtTagIndex::query()->insert(
             collect($tags)->unique()->values()->map(fn (string $tag): array => [
                 'thought_id' => $thought->id,
                 'tag' => $tag,
                 'created_at' => now(),
             ])->all(),
         );
+    }
+
+    public function deleteForThoughtId(int $thoughtId): void
+    {
+        ThoughtTagIndex::query()->where('thought_id', $thoughtId)->delete();
     }
 
     public function rebuildFromThoughts(Collection $thoughts, int $userId): void

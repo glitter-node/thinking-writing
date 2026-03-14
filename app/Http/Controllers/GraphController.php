@@ -23,7 +23,12 @@ class GraphController extends Controller
         $spaces = $this->spaceService->listForUser($request->user());
         $space = $spaces->firstWhere('id', (int) $request->integer('space')) ?? $spaces->first();
 
-        abort_if(! $space, 404);
+        if (! $space) {
+            return view('empty.spaces', [
+                'context' => 'graph explorer',
+            ]);
+        }
+
         $this->authorize('view', $space);
 
         return view('graph.index', [
@@ -71,7 +76,12 @@ class GraphController extends Controller
         $spaces = $this->spaceService->listForUser($request->user());
         $space = $spaces->firstWhere('id', (int) $request->integer('space')) ?? $spaces->first();
 
-        abort_if(! $space, 404);
+        if (! $space) {
+            return view('empty.spaces', [
+                'context' => 'graph explorer',
+            ]);
+        }
+
         $this->authorize('view', $space);
 
         $fromThought = $request->filled('from')

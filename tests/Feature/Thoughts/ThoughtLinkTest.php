@@ -50,4 +50,43 @@ class ThoughtLinkTest extends TestCase
             'target_thought_id' => $placeholderThought->id,
         ]);
     }
+
+    public function test_placeholder_thoughts_created_from_inline_links_use_the_normal_lifecycle(): void
+    {
+        $user = User::factory()->create();
+        $space = Space::factory()->for($user)->create();
+        $stream = Stream::factory()->for($space)->create(['position' => 1]);
+
+        $this->actingAs($user)
+            ->post(route('streams.thoughts.store', $stream), [
+                'content' => 'Capture [[NewLink]] now.',
+                'priority' => 'high',
+                'tags' => 'graph',
+            ])
+            ->assertRedirect(route('spaces.show', $space));
+
+        $sourceThought = Thought::query()
+            ->where('content', 'Capture [[NewLink]] now.')
+            ->firstOrFail();
+
+        $placeholderThought = Thought::query()
+            ->where('content', 'NewLink')
+            ->firstOrFail();
+
+        $this->assertDatabaseHas('thought_versions', [
+            'thought_id' => $placeholderThought->id,
+            'version' => 1,
+            'content' => 'NewLink',
+        ]);
+        $this->assertDatabaseHas('thought_events', [
+            'thought_id' => $placeholderThought->id,
+            'event_type' => 'ThoughtCreated',
+        ]);
+        $this->assertDatabaseHas('thought_graph_index', [
+            'thought_id' => $sourceThought->id,
+            'linked_thought_id' => $placeholderThought->id,
+            'link_type' => 'direct',
+            'depth' => 1,
+        ]);
+    }
 }

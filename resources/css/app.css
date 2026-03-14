@@ -32,6 +32,111 @@
     .priority-pill {
         @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.18em];
     }
+
+    .auth-shell {
+        @apply min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(251,146,60,0.18),_transparent_28%),radial-gradient(circle_at_top_right,_rgba(20,184,166,0.14),_transparent_24%),linear-gradient(180deg,_#111827,_#020617)] px-4 py-8 text-stone-100 sm:px-6 lg:px-8;
+    }
+
+    .auth-layout {
+        @apply mx-auto grid min-h-[calc(100vh-4rem)] w-full max-w-6xl items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(420px,520px)];
+    }
+
+    .auth-brand {
+        @apply hidden rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur lg:block;
+    }
+
+    .auth-card {
+        @apply w-full rounded-[2rem] border border-white/10 bg-stone-950/75 p-6 shadow-2xl shadow-black/30 backdrop-blur sm:p-8;
+    }
+
+    .auth-kicker {
+        @apply text-xs font-semibold uppercase tracking-[0.3em] text-orange-200;
+    }
+
+    .auth-title {
+        @apply font-['Space_Grotesk'] text-3xl font-bold tracking-tight text-stone-50 sm:text-4xl;
+    }
+
+    .auth-copy {
+        @apply text-sm leading-6 text-stone-400 sm:text-base;
+    }
+
+    .auth-label {
+        @apply block text-sm font-medium text-stone-200;
+    }
+
+    .auth-input {
+        @apply mt-2 block w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-stone-100 placeholder:text-stone-500 focus:border-orange-300/60 focus:ring-2 focus:ring-orange-300/40;
+    }
+
+    .auth-input-with-action {
+        @apply relative;
+    }
+
+    .auth-input-action {
+        @apply absolute right-3 top-[calc(50%+0.25rem)] -translate-y-1/2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-stone-300 transition hover:bg-white/10 hover:text-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-300/40;
+    }
+
+    .auth-checkbox {
+        @apply h-4 w-4 rounded border-white/15 bg-white/5 text-orange-300 focus:ring-2 focus:ring-orange-300/40;
+    }
+
+    .auth-button {
+        @apply inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-orange-300 px-5 py-3 text-sm font-semibold text-stone-950 transition hover:bg-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2 focus:ring-offset-stone-950 disabled:cursor-not-allowed disabled:opacity-70;
+    }
+
+    .auth-secondary-link {
+        @apply text-sm font-medium text-stone-300 underline-offset-4 transition hover:text-orange-200 hover:underline focus:outline-none focus:ring-2 focus:ring-orange-300/40;
+    }
+
+    .auth-status {
+        @apply rounded-2xl border border-emerald-300/20 bg-emerald-300/10 px-4 py-3 text-sm text-emerald-200;
+    }
+
+    .auth-error-list {
+        @apply mt-2 space-y-1 text-sm text-rose-300;
+    }
+
+    .thinking-graph {
+        @apply relative h-44 overflow-hidden rounded-[1.25rem] border border-white/10 bg-[radial-gradient(circle_at_20%_20%,_rgba(59,130,246,0.16),_transparent_22%),radial-gradient(circle_at_80%_26%,_rgba(168,85,247,0.16),_transparent_20%),linear-gradient(180deg,_rgba(24,24,27,0.95),_rgba(12,10,9,0.95))];
+    }
+
+    .thinking-graph__edges {
+        @apply absolute inset-0 h-full w-full;
+    }
+
+    .thinking-graph__edges path {
+        fill: none;
+        stroke: rgba(214, 211, 209, 0.3);
+        stroke-linecap: round;
+        stroke-width: 2;
+    }
+
+    .thinking-graph__glow {
+        @apply absolute inset-x-[24%] top-[34%] h-24 rounded-full;
+        background: radial-gradient(circle, rgba(96, 165, 250, 0.12), transparent 65%);
+    }
+
+    .thinking-graph__node {
+        @apply absolute rounded-full border bg-stone-900/85 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] shadow-lg shadow-black/20;
+        white-space: nowrap;
+    }
+
+    .thinking-graph__node--a {
+        @apply left-4 top-5 border-white/10 text-stone-100 sm:left-6;
+    }
+
+    .thinking-graph__node--b {
+        @apply right-4 top-6 border-white/10 text-stone-100 sm:right-6;
+    }
+
+    .thinking-graph__node--insight {
+        @apply bottom-5 left-[24%] border-white/10 text-stone-100;
+    }
+
+    .thinking-graph__node--project {
+        @apply bottom-5 right-[16%] border-white/10 text-stone-100;
+    }
 }
 
 .thought-ghost {

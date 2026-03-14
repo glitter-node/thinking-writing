@@ -50,6 +50,8 @@ class ThoughtLinkRepository
     public function getAdjacencyPairs(): SupportCollection
     {
         return ThoughtLink::query()
+            ->whereHas('sourceThought')
+            ->whereHas('targetThought')
             ->get(['source_thought_id', 'target_thought_id'])
             ->flatMap(fn (ThoughtLink $link) => [
                 ['source' => $link->source_thought_id, 'target' => $link->target_thought_id],
@@ -70,5 +72,36 @@ class ThoughtLinkRepository
                     ->where('target_thought_id', $thoughtAId);
             })
             ->exists();
+    }
+
+    public function pairKeysForThoughtIds(array $thoughtIds): array
+    {
+        if ($thoughtIds === []) {
+            return [];
+        }
+
+        return ThoughtLink::query()
+            ->whereIn('source_thought_id', $thoughtIds)
+            ->whereIn('target_thought_id', $thoughtIds)
+            ->get(['source_thought_id', 'target_thought_id'])
+            ->reduce(function (array $pairs, ThoughtLink $link): array {
+                $pairs[$this->pairKey($link->source_thought_id, $link->target_thought_id)] = true;
+
+                return $pairs;
+            }, []);
+    }
+
+    private function pairKey(int $thoughtAId, int $thoughtBId): string
+    {
+        return min($thoughtAId, $thoughtBId).':'.max($thoughtAId, $thoughtBId);
+    }
+
+    public function linkedThoughtIdsForSource(Thought $thought): array
+    {
+        return $thought->outgoingLinks()
+            ->orderBy('target_thought_id')
+            ->pluck('target_thought_id')
+            ->map(fn ($id): int => (int) $id)
+            ->all();
     }
 }

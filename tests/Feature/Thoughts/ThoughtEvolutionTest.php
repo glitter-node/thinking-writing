@@ -37,6 +37,29 @@ class ThoughtEvolutionTest extends TestCase
         $evolvedThought = Thought::query()->where('parent_id', $thought->id)->firstOrFail();
         $this->assertSame('Refined idea', $evolvedThought->content);
         $this->assertSame(['strategy', 'build'], $evolvedThought->tags);
+        $this->assertDatabaseHas('thought_versions', [
+            'thought_id' => $evolvedThought->id,
+            'version' => 1,
+            'content' => 'Refined idea',
+        ]);
+        $this->assertDatabaseHas('thought_events', [
+            'thought_id' => $evolvedThought->id,
+            'event_type' => 'ThoughtCreated',
+        ]);
+        $this->assertDatabaseHas('thought_graph_index', [
+            'thought_id' => $evolvedThought->id,
+            'linked_thought_id' => $thought->id,
+            'link_type' => 'evolution',
+            'depth' => 1,
+        ]);
+        $this->assertDatabaseHas('thought_tag_index', [
+            'thought_id' => $evolvedThought->id,
+            'tag' => 'strategy',
+        ]);
+        $this->assertDatabaseHas('thought_tag_index', [
+            'thought_id' => $evolvedThought->id,
+            'tag' => 'build',
+        ]);
 
         $threadResponse = $this->actingAs($user)
             ->getJson(route('thoughts.thread', $evolvedThought));

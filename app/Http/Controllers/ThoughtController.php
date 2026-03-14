@@ -9,7 +9,6 @@ use App\Domain\Thought\Models\Thought;
 use App\Domain\Thought\Requests\QuickStoreThoughtRequest;
 use App\Domain\Thought\Requests\StoreThoughtRequest;
 use App\Domain\Thought\Requests\UpdateThoughtRequest;
-use App\Domain\Thought\Services\ThoughtService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 

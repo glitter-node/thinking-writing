@@ -42,11 +42,14 @@ class ThoughtEmergenceService
     public function calculateCooccurrence(int $userId): void
     {
         $thoughts = $this->thoughtRepository->getAllForUser($userId);
+        $thoughtIds = $thoughts->pluck('id')->all();
+        $linkedPairs = $this->thoughtLinkRepository->pairKeysForThoughtIds($thoughtIds);
+        $synthesisPairs = $this->thoughtSynthesisRepository->pairKeysForThoughtIds($thoughtIds);
         $rows = [];
 
         foreach ($thoughts as $index => $thoughtA) {
             foreach ($thoughts->slice($index + 1) as $thoughtB) {
-                $score = $this->scorePair($thoughtA, $thoughtB);
+                $score = $this->scorePair($thoughtA, $thoughtB, $linkedPairs, $synthesisPairs);
 
                 if ($score <= 0) {
                     continue;
@@ -61,7 +64,7 @@ class ThoughtEmergenceService
             }
         }
 
-        $this->thoughtCooccurrenceRepository->replaceForThoughtIds($thoughts->pluck('id')->all(), $rows);
+        $this->thoughtCooccurrenceRepository->replaceForThoughtIds($thoughtIds, $rows);
     }
 
     public function suggestConnections(Thought $thought): array
@@ -145,7 +148,7 @@ class ThoughtEmergenceService
         });
     }
 
-    private function scorePair(Thought $thoughtA, Thought $thoughtB): int
+    private function scorePair(Thought $thoughtA, Thought $thoughtB, array $linkedPairs, array $synthesisPairs): int
     {
         $score = 0;
 
@@ -159,11 +162,11 @@ class ThoughtEmergenceService
             $score += $sharedTags;
         }
 
-        if ($this->areLinked($thoughtA->id, $thoughtB->id)) {
+        if ($this->hasPair($linkedPairs, $thoughtA->id, $thoughtB->id)) {
             $score += 2;
         }
 
-        if ($this->cooccurInSynthesis($thoughtA->id, $thoughtB->id)) {
+        if ($this->hasPair($synthesisPairs, $thoughtA->id, $thoughtB->id)) {
             $score += 4;
         }
 
@@ -178,13 +181,13 @@ class ThoughtEmergenceService
         return $score;
     }
 
-    private function areLinked(int $thoughtAId, int $thoughtBId): bool
+    private function hasPair(array $pairs, int $thoughtAId, int $thoughtBId): bool
     {
-        return $this->thoughtLinkRepository->pairExists($thoughtAId, $thoughtBId);
+        return $pairs[$this->pairKey($thoughtAId, $thoughtBId)] ?? false;
     }
 
-    private function cooccurInSynthesis(int $thoughtAId, int $thoughtBId): bool
+    private function pairKey(int $thoughtAId, int $thoughtBId): string
     {
-        return $this->thoughtSynthesisRepository->pairExistsInSynthesis($thoughtAId, $thoughtBId);
+        return min($thoughtAId, $thoughtBId).':'.max($thoughtAId, $thoughtBId);
     }
 }

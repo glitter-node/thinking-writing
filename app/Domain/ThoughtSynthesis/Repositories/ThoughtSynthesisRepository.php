@@ -51,6 +51,8 @@ class ThoughtSynthesisRepository
     {
         return ThoughtSynthesisItem::query()
             ->with('synthesis')
+            ->whereHas('thought')
+            ->whereHas('synthesis.synthesizedThought')
             ->get()
             ->flatMap(fn (ThoughtSynthesisItem $item) => [
                 ['source' => $item->thought_id, 'target' => $item->synthesis->synthesized_thought_id],
@@ -73,5 +75,36 @@ class ThoughtSynthesisRepository
             ->whereIn('synthesis_id', $synthesisIdsForA)
             ->where('thought_id', $thoughtBId)
             ->exists();
+    }
+
+    public function pairKeysForThoughtIds(array $thoughtIds): array
+    {
+        if ($thoughtIds === []) {
+            return [];
+        }
+
+        return ThoughtSynthesisItem::query()
+            ->whereIn('thought_id', $thoughtIds)
+            ->orderBy('synthesis_id')
+            ->orderBy('thought_id')
+            ->get(['synthesis_id', 'thought_id'])
+            ->groupBy('synthesis_id')
+            ->reduce(function (array $pairs, Collection $items): array {
+                $ids = $items->pluck('thought_id')->unique()->values()->all();
+                $count = count($ids);
+
+                for ($left = 0; $left < $count; $left++) {
+                    for ($right = $left + 1; $right < $count; $right++) {
+                        $pairs[$this->pairKey($ids[$left], $ids[$right])] = true;
+                    }
+                }
+
+                return $pairs;
+            }, []);
+    }
+
+    private function pairKey(int $thoughtAId, int $thoughtBId): string
+    {
+        return min($thoughtAId, $thoughtBId).':'.max($thoughtAId, $thoughtBId);
     }
 }

@@ -2,27 +2,19 @@
 
 namespace App\Domain\Thought\Services;
 
+use App\Domain\Thought\Events\ThoughtEvolved;
 use App\Domain\Thought\Models\Thought;
 use App\Domain\Thought\Repositories\ThoughtEvolutionRepository;
 use App\Domain\Thought\Repositories\ThoughtRepository;
-use App\Domain\ThoughtEvent\Services\ThoughtEventService;
-use App\Domain\ThoughtEmergence\Services\ThoughtEmergenceService;
-use App\Domain\ThoughtVersion\Services\ThoughtVersionService;
-use App\Domain\ThinkingSession\Services\ThinkingSessionService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class ThoughtEvolutionService
 {
     public function __construct(
+        private readonly ThoughtService $thoughtService,
         private readonly ThoughtRepository $thoughtRepository,
         private readonly ThoughtEvolutionRepository $thoughtEvolutionRepository,
-        private readonly ThoughtLinkService $thoughtLinkService,
-        private readonly ThinkingSessionService $thinkingSessionService,
-        private readonly ThoughtGraphIndexService $thoughtGraphIndexService,
-        private readonly ThoughtEmergenceService $thoughtEmergenceService,
-        private readonly ThoughtVersionService $thoughtVersionService,
-        private readonly ThoughtEventService $thoughtEventService,
     ) {
     }
 
@@ -42,18 +34,24 @@ class ThoughtEvolutionService
                 'position' => $parentThought->position + 1,
             ]);
 
-            $thought = $this->thoughtLinkService->createLinks($thought);
-            $this->thoughtVersionService->createInitialVersion($thought);
-            $this->thoughtEventService->recordEvent($thought, 'ThoughtCreated', [
-                'source' => 'evolution',
-                'parent_id' => $parentThought->id,
-            ]);
-            $this->thoughtEventService->recordEvent($thought, 'ThoughtLinked', ['source' => 'evolution']);
-            $this->thoughtEmergenceService->updateThoughtIndexes($thought);
-            $this->thoughtEmergenceService->calculateCooccurrence($parentThought->user_id);
-            $this->thoughtGraphIndexService->updateGraphIndex($parentThought->id);
-            $this->thoughtGraphIndexService->updateGraphIndex($thought->id);
-            $this->thinkingSessionService->recordThought($parentThought->user_id);
+            $thought = $this->thoughtService->syncLinks(
+                $thought,
+                'evolution',
+                fn (Thought $sourceThought, string $label): Thought => $this->thoughtService->createPlaceholder(
+                    $sourceThought->stream,
+                    $sourceThought->user,
+                    $label,
+                ),
+            );
+
+            event(new ThoughtEvolved(
+                $thought->id,
+                $thought->stream->space_id,
+                $thought->user_id,
+                $thought->stream_id,
+                $parentThought->id,
+            ));
+            $this->thoughtService->dispatchThoughtLinked($thought, 'evolution');
 
             return $thought;
         });
