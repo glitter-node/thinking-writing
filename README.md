@@ -1,8 +1,10 @@
 # Glitter Thought Write
 
-A personal thinking workspace for capturing, evolving, and connecting thoughts.
+ThinkWrite is a Laravel-based thinking workspace designed to capture, connect, and evolve ideas through a structured thought model.
 
-Repository name: `glitter-thought-board`
+Instead of treating ideas as isolated notes, ThinkWrite organizes ideas as **connected thought entities** with relationships such as links, evolution, and synthesis.
+
+The application is implemented as a **modular Laravel monolith** with server-rendered UI and graph exploration features.
 
 ## Stack
 
