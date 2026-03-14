@@ -916,14 +916,16 @@ php artisan test
 
 ThinkWrite uses an **Open Core licensing model.**
 The core thinking engine contained in this repository is licensed under:
-```GNU Affero General Public License v3.0 (AGPL-3.0)```
+```
+GNU Affero General Public License v3.0 (AGPL-3.0)
+```
 This means:
 - you may use, study, and modify the software
 - you may run your own instance
 - if you modify the software and run it as a network service, you must publish the modified source code
 See the LICENSE file for details.
 
-```
+---
 
 ##  Open Core Model
 
