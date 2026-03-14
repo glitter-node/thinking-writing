@@ -25,13 +25,13 @@
                     <h1 class="mt-3 font-['Space_Grotesk'] text-4xl font-bold text-stone-50">{{ $space->title }}</h1>
                     <p class="mt-3 max-w-3xl text-sm leading-6 text-stone-300">{{ $space->description ?: 'No description yet.' }}</p>
                 </div>
-                <div class="flex flex-wrap items-center gap-3">
-                    <a href="{{ route('graph.index', ['space' => $space->id]) }}" class="rounded-full border border-orange-300/30 bg-orange-300/10 px-4 py-3 text-xs uppercase tracking-[0.24em] text-orange-100 transition hover:bg-orange-300/15">Open graph</a>
-                    <a href="{{ route('canvas.index', ['space' => $space->id]) }}" class="rounded-full border border-cyan-300/30 bg-cyan-300/10 px-4 py-3 text-xs uppercase tracking-[0.24em] text-cyan-100 transition hover:bg-cyan-300/15">Open canvas</a>
-                    <a href="{{ route('emergence.index', ['space' => $space->id]) }}" class="rounded-full border border-teal-300/30 bg-teal-300/10 px-4 py-3 text-xs uppercase tracking-[0.24em] text-teal-100 transition hover:bg-teal-300/15">Open emergence</a>
-                    <a href="{{ route('projects.index') }}" class="rounded-full border border-sky-300/30 bg-sky-300/10 px-4 py-3 text-xs uppercase tracking-[0.24em] text-sky-100 transition hover:bg-sky-300/15">Open projects</a>
-                    <a href="{{ route('thoughts.export') }}" class="rounded-full border border-white/10 px-4 py-3 text-xs uppercase tracking-[0.24em] text-stone-200 transition hover:border-orange-300/30 hover:text-orange-100">Export JSON</a>
-                    <div class="rounded-full border border-white/10 px-4 py-3 text-xs uppercase tracking-[0.24em] text-stone-300">{{ $space->streams->count() }} streams</div>
+                <div class="grid w-full gap-3 sm:flex sm:w-auto sm:flex-wrap sm:items-center">
+                    <a href="{{ route('graph.index', ['space' => $space->id]) }}" class="rounded-full border border-orange-300/30 bg-orange-300/10 px-4 py-3 text-center text-xs uppercase tracking-[0.24em] text-orange-100 transition hover:bg-orange-300/15">Open graph</a>
+                    <a href="{{ route('canvas.index', ['space' => $space->id]) }}" class="rounded-full border border-cyan-300/30 bg-cyan-300/10 px-4 py-3 text-center text-xs uppercase tracking-[0.24em] text-cyan-100 transition hover:bg-cyan-300/15">Open canvas</a>
+                    <a href="{{ route('emergence.index', ['space' => $space->id]) }}" class="rounded-full border border-teal-300/30 bg-teal-300/10 px-4 py-3 text-center text-xs uppercase tracking-[0.24em] text-teal-100 transition hover:bg-teal-300/15">Open emergence</a>
+                    <a href="{{ route('projects.index') }}" class="rounded-full border border-sky-300/30 bg-sky-300/10 px-4 py-3 text-center text-xs uppercase tracking-[0.24em] text-sky-100 transition hover:bg-sky-300/15">Open projects</a>
+                    <a href="{{ route('thoughts.export') }}" class="rounded-full border border-white/10 px-4 py-3 text-center text-xs uppercase tracking-[0.24em] text-stone-200 transition hover:border-orange-300/30 hover:text-orange-100">Export JSON</a>
+                    <div class="rounded-full border border-white/10 px-4 py-3 text-center text-xs uppercase tracking-[0.24em] text-stone-300">{{ $space->streams->count() }} streams</div>
                 </div>
             </div>
 
@@ -62,12 +62,12 @@
                     <form method="POST" action="{{ route('spaces.streams.store', $space) }}" class="flex flex-col gap-3 md:flex-row">
                         @csrf
                         <input name="title" type="text" placeholder="Add stream" class="w-full rounded-2xl border border-white/10 bg-stone-950/60 px-4 py-3 text-sm text-stone-100 placeholder:text-stone-500 focus:border-orange-300 focus:outline-none">
-                        <button type="submit" class="rounded-2xl bg-white/10 px-5 py-3 text-sm font-semibold text-stone-100 transition hover:bg-white/15">Add stream</button>
+                        <button type="submit" class="w-full rounded-2xl bg-white/10 px-5 py-3 text-sm font-semibold text-stone-100 transition hover:bg-white/15 md:w-auto">Add stream</button>
                     </form>
                 </section>
 
-                <section class="overflow-x-auto pb-4">
-                    <div class="flex min-w-max gap-5">
+                <section class="pb-4 md:overflow-x-auto">
+                    <div class="grid gap-5 md:flex md:min-w-max">
                         @forelse ($space->streams as $stream)
                             <x-spaces.board.stream-column :stream="$stream" :search="$search" />
                         @empty

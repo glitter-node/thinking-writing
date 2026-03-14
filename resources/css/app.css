@@ -7,8 +7,20 @@
         display: none !important;
     }
 
+    html {
+        overflow-x: hidden;
+    }
+
     body {
         @apply bg-stone-950 text-stone-100;
+        overflow-x: hidden;
+    }
+
+    img,
+    video,
+    canvas,
+    svg {
+        max-width: 100%;
     }
 }
 

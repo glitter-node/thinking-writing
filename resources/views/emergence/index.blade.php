@@ -8,7 +8,7 @@
                     <p class="mt-3 max-w-3xl text-sm leading-6 text-stone-300">Discover recurring tags, strong co-occurrences, and hidden patterns without AI.</p>
                 </div>
 
-                <form method="GET" action="{{ route('emergence.index') }}" class="grid gap-3 sm:min-w-[280px]">
+                <form method="GET" action="{{ route('emergence.index') }}" class="grid w-full gap-3 sm:w-auto sm:min-w-[280px]">
                     <label for="space" class="text-xs uppercase tracking-[0.24em] text-stone-500">Space</label>
                     <select id="space" name="space" onchange="this.form.submit()" class="rounded-2xl border border-white/10 bg-stone-950/60 px-4 py-3 text-sm text-stone-100 focus:border-orange-300 focus:outline-none">
                         @foreach ($spaces as $space)

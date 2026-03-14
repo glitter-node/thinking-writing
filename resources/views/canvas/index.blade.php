@@ -18,7 +18,7 @@
                     <p class="mt-3 max-w-3xl text-sm leading-6 text-stone-300">Position thoughts freely, drag clusters together, and inspect links, evolution, and synthesis in one spatial workspace.</p>
                 </div>
 
-                <div class="flex flex-col gap-4 sm:min-w-[320px]">
+                <div class="flex w-full flex-col gap-4 sm:w-auto sm:min-w-[320px]">
                     <form method="GET" action="{{ route('canvas.index') }}" class="grid gap-3">
                         <label for="space" class="text-xs uppercase tracking-[0.24em] text-stone-500">Space</label>
                         <select id="space" name="space" onchange="this.form.submit()" class="rounded-2xl border border-white/10 bg-stone-950/60 px-4 py-3 text-sm text-stone-100 focus:border-orange-300 focus:outline-none">
@@ -39,12 +39,12 @@
 
         <div class="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
             <section class="glass-panel overflow-hidden p-0">
-                <div class="flex items-center justify-between border-b border-white/10 px-6 py-4">
-                    <div>
+                <div class="flex flex-col gap-4 border-b border-white/10 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="min-w-0">
                         <p class="text-xs uppercase tracking-[0.26em] text-stone-500">Canvas mode</p>
                         <h2 class="mt-2 font-['Space_Grotesk'] text-2xl font-bold text-stone-50">Freeform thought layout</h2>
                     </div>
-                    <div class="flex gap-2">
+                    <div class="flex flex-wrap gap-2">
                         <button type="button" x-on:click="pan('left')" class="rounded-full border border-white/10 px-3 py-1 text-xs text-stone-200">Left</button>
                         <button type="button" x-on:click="pan('right')" class="rounded-full border border-white/10 px-3 py-1 text-xs text-stone-200">Right</button>
                         <button type="button" x-on:click="pan('up')" class="rounded-full border border-white/10 px-3 py-1 text-xs text-stone-200">Up</button>

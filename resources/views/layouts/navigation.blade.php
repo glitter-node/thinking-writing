@@ -1,11 +1,11 @@
 <nav x-data="{ open: false }" class="border-b border-white/10 bg-stone-950/70 backdrop-blur">
-    <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center gap-8">
-            <a href="{{ route('spaces.index') }}" class="flex items-center gap-3">
+    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+        <div class="flex min-w-0 items-center gap-8">
+            <a href="{{ route('spaces.index') }}" class="flex min-w-0 items-center gap-3">
                 <x-application-logo class="h-10 w-10 text-orange-300" />
-                <div>
-                    <p class="font-['Space_Grotesk'] text-lg font-bold tracking-[0.08em] text-stone-50">Glitter Thought Write</p>
-                    <p class="text-xs uppercase tracking-[0.28em] text-stone-400">Thinking workspace</p>
+                <div class="min-w-0">
+                    <p class="truncate font-['Space_Grotesk'] text-base font-bold tracking-[0.04em] text-stone-50 sm:text-lg sm:tracking-[0.08em]">Glitter Thought Write</p>
+                    <p class="hidden text-xs uppercase tracking-[0.28em] text-stone-400 sm:block">Thinking workspace</p>
                 </div>
             </a>
 
@@ -35,7 +35,7 @@
             </form>
         </div>
 
-        <button @click="open = ! open" class="inline-flex items-center rounded-full border border-white/10 p-2 text-stone-200 sm:hidden">
+        <button @click="open = ! open" class="ml-auto inline-flex items-center rounded-full border border-white/10 p-2 text-stone-200 sm:hidden">
             <svg class="h-5 w-5" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                 <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />

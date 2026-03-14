@@ -14,12 +14,12 @@
     <body class="font-['DM_Sans'] antialiased">
         <div class="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(251,146,60,0.28),_transparent_26%),radial-gradient(circle_at_80%_20%,_rgba(20,184,166,0.2),_transparent_24%),linear-gradient(180deg,_#1c1917,_#09090b)] px-4 py-8 text-stone-100 sm:px-6 lg:px-8">
             <div class="mx-auto flex max-w-7xl flex-col gap-12">
-                <header class="flex items-center justify-between">
-                    <div class="flex items-center gap-3">
+                <header class="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="flex min-w-0 items-center gap-3">
                         <x-application-logo class="h-10 w-10 text-orange-300" />
-                        <div>
-                            <p class="font-['Space_Grotesk'] text-lg font-bold tracking-[0.08em]">Glitter Thought Write</p>
-                            <p class="text-xs uppercase tracking-[0.3em] text-stone-400">Personal thinking graph</p>
+                        <div class="min-w-0">
+                            <p class="truncate font-['Space_Grotesk'] text-base font-bold tracking-[0.04em] sm:text-lg sm:tracking-[0.08em]">Glitter Thought Write</p>
+                            <p class="text-xs uppercase tracking-[0.24em] text-stone-400 sm:tracking-[0.3em]">Personal thinking graph</p>
                         </div>
                     </div>
                     @if(false)
@@ -48,7 +48,7 @@
 
                         <div class="glass-panel p-6">
                             <p class="text-xs uppercase tracking-[0.3em] text-stone-500">Thinking model</p>
-                            <div class="mt-5 flex items-center gap-3 text-center text-xs font-semibold uppercase tracking-[0.22em] text-stone-300">
+                            <div class="mt-5 grid gap-3 text-center text-xs font-semibold uppercase tracking-[0.22em] text-stone-300 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)] sm:items-center">
                                 <div class="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-4">Thought</div>
                                 <span class="text-orange-200">→</span>
                                 <div class="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-4">Link</div>

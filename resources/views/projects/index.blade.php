@@ -21,10 +21,10 @@
             ];
         @endphp
 
-        <div class="mt-6 overflow-x-auto">
-            <div class="flex min-w-max gap-5">
+        <div class="mt-6">
+            <div class="grid gap-5 lg:grid-cols-2">
                 @foreach ($columns as $status => $label)
-                    <section class="glass-panel flex w-[380px] shrink-0 flex-col p-4">
+                    <section class="glass-panel flex min-w-0 flex-col p-4">
                         <div class="mb-4 flex items-center justify-between gap-3">
                             <div>
                                 <p class="text-xs uppercase tracking-[0.26em] text-stone-500">Projects</p>

@@ -14,7 +14,7 @@
                     <a href="{{ route('canvas.index', ['space' => $currentSpace->id]) }}" class="mt-4 inline-flex rounded-full border border-cyan-300/30 bg-cyan-300/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100 transition hover:bg-cyan-300/15">Open spatial canvas</a>
                 </div>
 
-                <form method="GET" action="{{ route('graph.index') }}" class="grid gap-3 sm:min-w-[280px]">
+                <form method="GET" action="{{ route('graph.index') }}" class="grid w-full gap-3 sm:w-auto sm:min-w-[280px]">
                     <label for="space" class="text-xs uppercase tracking-[0.24em] text-stone-500">Space</label>
                     <select id="space" name="space" onchange="this.form.submit()" class="rounded-2xl border border-white/10 bg-stone-950/60 px-4 py-3 text-sm text-stone-100 focus:border-orange-300 focus:outline-none">
                         @foreach ($spaces as $space)
@@ -31,7 +31,7 @@
                     <p class="text-xs uppercase tracking-[0.26em] text-stone-500">Cytoscape canvas</p>
                     <h2 class="mt-2 font-['Space_Grotesk'] text-2xl font-bold text-stone-50">Thought network</h2>
                     <div class="mt-4 rounded-3xl border border-white/10 bg-white/[0.03] p-4">
-                        <div class="flex flex-col gap-4 lg:flex-row lg:items-end">
+                        <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] lg:items-end">
                             <div class="grid gap-2">
                                 <label for="graph-path-from" class="text-xs uppercase tracking-[0.2em] text-stone-400">Start thought</label>
                                 <select id="graph-path-from" class="rounded-2xl border border-white/10 bg-stone-950/60 px-4 py-3 text-sm text-stone-100 focus:border-orange-300 focus:outline-none">

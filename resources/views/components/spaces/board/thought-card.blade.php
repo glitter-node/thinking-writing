@@ -1,7 +1,7 @@
 @props(['thought'])
 
 <article id="thought-{{ $thought->id }}" data-thought-card data-thought-id="{{ $thought->id }}" data-raw-content="{{ $thought->content }}" data-move-url="{{ route('thoughts.move', $thought) }}" x-data="{ editing: false }" class="rounded-[1.7rem] border border-white/10 bg-stone-950/80 p-4 shadow-lg shadow-black/20">
-    <div class="flex items-start justify-between gap-3">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div class="flex flex-wrap items-center gap-2">
             <span class="priority-pill {{ $thought->priority === 'high' ? 'bg-rose-400/15 text-rose-200' : ($thought->priority === 'medium' ? 'bg-amber-300/15 text-amber-200' : 'bg-teal-300/15 text-teal-200') }}">
                 {{ $thought->priority }}
@@ -10,7 +10,7 @@
                 {{ $thought->stage ?? 'thought' }}
             </span>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2 sm:justify-end">
             <label class="inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-stone-300">
                 <input type="checkbox" class="rounded border-white/20 bg-stone-950 text-orange-300 focus:ring-orange-300" :checked="isThoughtSelected({{ $thought->id }})" x-on:change="toggleThoughtSelection({ id: {{ $thought->id }}, content: @js($thought->content) })">
                 Select
@@ -27,7 +27,7 @@
 
     <p data-thought-content-display class="mt-4 whitespace-pre-line text-sm leading-6 text-stone-100">{{ $thought->content }}</p>
 
-    <div class="mt-4 flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-stone-500">
+    <div class="mt-4 flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-stone-500">
         <span>thought</span>
         <span>&rarr;</span>
         <span>concept</span>
