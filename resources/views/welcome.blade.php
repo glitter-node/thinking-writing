@@ -32,9 +32,9 @@
 
                 <section class="space-y-8">
                     <div class="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-end">
-                        <div class="space-y-6">
-                            <span class="inline-flex rounded-full border border-orange-300/30 bg-orange-300/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-orange-200">Personal thinking graph workspace</span>
-                            <h1 class="max-w-4xl font-['Space_Grotesk'] text-5xl font-bold leading-tight text-stone-50 sm:text-6xl">
+                        <div class="min-w-0 space-y-6">
+                            <span class="inline-block max-w-full rounded-full border border-orange-300/30 bg-orange-300/10 px-4 py-2 text-xs font-semibold uppercase leading-relaxed tracking-[0.18em] text-orange-200 sm:tracking-[0.3em]">Personal thinking graph workspace</span>
+                            <h1 class="max-w-4xl font-['Space_Grotesk'] text-4xl font-bold leading-tight text-stone-50 sm:text-6xl">
                                 Capture thoughts. Connect them. Watch ideas evolve.
                             </h1>
                             <p class="max-w-2xl text-lg text-stone-300">
@@ -46,7 +46,7 @@
                             </div>
                         </div>
 
-                        <div class="glass-panel p-6">
+                        <div class="glass-panel min-w-0 p-6">
                             <p class="text-xs uppercase tracking-[0.3em] text-stone-500">Thinking model</p>
                             <div class="mt-5 grid gap-3 text-center text-xs font-semibold uppercase tracking-[0.22em] text-stone-300 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)] sm:items-center">
                                 <div class="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-4">Thought</div>
