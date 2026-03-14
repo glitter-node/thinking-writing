@@ -909,3 +909,45 @@ Run:
 ```bash
 php artisan test
 ```
+
+```
+
+## License
+
+ThinkWrite uses an **Open Core licensing model.**
+The core thinking engine contained in this repository is licensed under:
+```GNU Affero General Public License v3.0 (AGPL-3.0)```
+This means:
+- you may use, study, and modify the software
+- you may run your own instance
+- if you modify the software and run it as a network service, you must publish the modified source code
+See the LICENSE file for details.
+
+```
+
+##  Open Core Model
+
+ThinkWrite follows an Open Core architecture.
+```
+Core Thinking Engine   → AGPL-3.0
+Plugins / Extensions   → may use permissive licenses
+Hosted SaaS Platform   → proprietary components
+```
+This repository contains the core thinking engine and all essential logic required to run a self-hosted instance.
+The official hosted service may include additional infrastructure components that are not part of the open source distribution.
+
+---
+
+## Trademark
+
+The names **ThinkWrite** and **Glitter** may be used to refer to this project, but they may not be used to promote derivative hosted services without permission.
+
+If you build a public service based on ThinkWrite, please use a different name unless explicitly authorized.
+
+---
+
+## Contributing
+
+Contributions are welcome.
+
+By submitting a pull request you agree that your contributions may be distributed under the same license as the project.
