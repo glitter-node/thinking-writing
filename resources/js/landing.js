@@ -1,3 +1,5 @@
+import '../css/landing.css';
+
 const bootDiagrams = () => {
     if (document.querySelector('.mermaid')) {
         void import('./diagrams');

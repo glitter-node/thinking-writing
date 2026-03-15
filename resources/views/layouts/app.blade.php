@@ -20,7 +20,7 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=space-grotesk:400,500,700&family=dm-sans:400,500,700&display=swap" rel="stylesheet" />
 
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/js/app.js'])
     </head>
     <body class="font-['DM_Sans'] antialiased">
         <div class="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(251,146,60,0.25),_transparent_28%),radial-gradient(circle_at_top_right,_rgba(20,184,166,0.18),_transparent_24%),linear-gradient(180deg,_#1c1917,_#09090b)]">

@@ -10,11 +10,6 @@
         <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
         <link rel="preload" href="https://fonts.bunny.net/css?family=space-grotesk:400,500,700&family=dm-sans:400,500,700&display=swap" as="style">
         <link href="https://fonts.bunny.net/css?family=space-grotesk:400,500,700&family=dm-sans:400,500,700&display=swap" rel="stylesheet" />
-        <link rel="preload" href="{{ Vite::asset('resources/css/landing.css') }}" as="style">
-        <link rel="stylesheet" href="{{ Vite::asset('resources/css/landing.css') }}" media="print" onload="this.media='all'">
-        <noscript>
-            <link rel="stylesheet" href="{{ Vite::asset('resources/css/landing.css') }}">
-        </noscript>
         @vite(['resources/js/landing.js'])
     </head>
     <body class="font-['DM_Sans'] antialiased">

@@ -1,3 +1,5 @@
+import '../css/app.css';
+
 import './bootstrap';
 import './back-button';
 import './board';
