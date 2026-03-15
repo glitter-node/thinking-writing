@@ -47,6 +47,5 @@
                 </div>
             </footer>
         </div>
-        <script type="module" src="{{ asset('js/architecture-diagrams.js') }}"></script>
     </body>
 </html>

@@ -1,0 +1,29 @@
+@config "../../tailwind.landing.config.js";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        overflow-x: hidden;
+    }
+
+    body {
+        @apply bg-stone-950 text-stone-100;
+        overflow-x: hidden;
+    }
+
+    img,
+    video,
+    canvas,
+    svg {
+        max-width: 100%;
+    }
+}
+
+@layer components {
+    .glass-panel {
+        @apply rounded-3xl border border-white/10 bg-white/5 backdrop-blur;
+    }
+}

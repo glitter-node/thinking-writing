@@ -7,9 +7,15 @@
         <meta name="application-version" content="{{ app_version() }}">
         <meta name="description" content="A personal thinking workspace for capturing and evolving ideas.">
         <title>{{ config('app.name', 'Glitter Thought Write') }}</title>
-        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
+        <link rel="preload" href="https://fonts.bunny.net/css?family=space-grotesk:400,500,700&family=dm-sans:400,500,700&display=swap" as="style">
         <link href="https://fonts.bunny.net/css?family=space-grotesk:400,500,700&family=dm-sans:400,500,700&display=swap" rel="stylesheet" />
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <link rel="preload" href="{{ Vite::asset('resources/css/landing.css') }}" as="style">
+        <link rel="stylesheet" href="{{ Vite::asset('resources/css/landing.css') }}" media="print" onload="this.media='all'">
+        <noscript>
+            <link rel="stylesheet" href="{{ Vite::asset('resources/css/landing.css') }}">
+        </noscript>
+        @vite(['resources/js/landing.js'])
     </head>
     <body class="font-['DM_Sans'] antialiased">
         <div class="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(251,146,60,0.28),_transparent_26%),radial-gradient(circle_at_80%_20%,_rgba(20,184,166,0.2),_transparent_24%),linear-gradient(180deg,_#1c1917,_#09090b)] px-4 py-8 text-stone-100 sm:px-6 lg:px-8">
@@ -30,8 +36,9 @@
                     @endif
                 </header>
 
-                <section class="space-y-8">
-                    <div class="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-end">
+                <main>
+                    <section class="space-y-8">
+                        <div class="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-end">
                         <div class="min-w-0 space-y-6">
                             <span class="inline-block max-w-full rounded-full border border-orange-300/30 bg-orange-300/10 px-4 py-2 text-xs font-semibold uppercase leading-relaxed tracking-[0.18em] text-orange-200 sm:tracking-[0.3em]">Personal thinking graph workspace</span>
                             <h1 class="max-w-4xl font-['Space_Grotesk'] text-4xl font-bold leading-tight text-stone-50 sm:text-6xl">
@@ -83,7 +90,10 @@
                     <div class="glass-panel overflow-hidden p-4">
                         <div class="grid gap-6 rounded-[2rem] border border-white/10 bg-stone-950/70 p-4 shadow-2xl shadow-black/30 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:p-6">
                             <div class="overflow-hidden rounded-[1.5rem] border border-white/10 bg-stone-900/80">
-                                <img src="{{ asset('img/ThoughtGraph.png') }}" alt="ThinkWrite thought graph view" class="h-full w-full object-cover object-top" />
+                                <picture>
+                                    <source srcset="/img/thought_graph_optimized.webp" type="image/webp">
+                                    <img src="/img/ThoughtGraph.png" alt="Thought Graph" fetchpriority="high" decoding="async" class="h-full w-full object-cover object-top" />
+                                </picture>
                             </div>
                             <div class="flex flex-col justify-center space-y-5">
                                 <div>
@@ -119,7 +129,10 @@
                         <div class="grid gap-6 xl:grid-cols-3">
                             <article class="glass-panel overflow-hidden p-4">
                                 <div class="overflow-hidden rounded-[1.5rem] border border-white/10 bg-stone-950/70">
-                                    <img src="{{ asset('img/ThoughtGraph.png') }}" alt="ThinkWrite graph view preview" class="h-64 min-h-[16rem] w-full object-cover object-top md:h-64" />
+                                    <picture>
+                                        <source srcset="/img/thought_graph_optimized.webp" type="image/webp">
+                                        <img src="/img/ThoughtGraph.png" alt="Thought Graph" loading="lazy" decoding="async" class="h-64 min-h-[16rem] w-full object-cover object-top md:h-64" />
+                                    </picture>
                                 </div>
                                 <div class="mt-4 space-y-2">
                                     <p class="text-xs uppercase tracking-[0.28em] text-orange-200">Graph View</p>
@@ -202,25 +215,25 @@
                         </div>
                     </div>
 
-                    <section class="glass-panel space-y-4 p-4 sm:space-y-5 sm:p-6">
-                        <div class="max-w-3xl space-y-3">
-                            <p class="text-xs uppercase tracking-[0.3em] text-stone-500">Architecture</p>
-                            <h2 class="font-['Space_Grotesk'] text-3xl font-bold text-stone-50 sm:text-4xl">Thought Domain Event Architecture</h2>
-                            <p class="text-base leading-7 text-stone-300">
-                                The thought lifecycle is event-driven. Create, placeholder, evolution, synthesis, link, and delete actions dispatch domain events that update versions, activity logs, graph indexes, tag indexes, and cooccurrence signals without concentrating all of that work in one service.
-                            </p>
-                            <p class="text-sm leading-6 text-stone-400">
-                                This architecture ensures every change in your thinking automatically updates your knowledge graph.
-                            </p>
-                        </div>
+                        <section class="glass-panel space-y-4 p-4 sm:space-y-5 sm:p-6">
+                            <div class="max-w-3xl space-y-3">
+                                <p class="text-xs uppercase tracking-[0.3em] text-stone-500">Architecture</p>
+                                <h2 class="font-['Space_Grotesk'] text-3xl font-bold text-stone-50 sm:text-4xl">Thought Domain Event Architecture</h2>
+                                <p class="text-base leading-7 text-stone-300">
+                                    The thought lifecycle is event-driven. Create, placeholder, evolution, synthesis, link, and delete actions dispatch domain events that update versions, activity logs, graph indexes, tag indexes, and cooccurrence signals without concentrating all of that work in one service.
+                                </p>
+                                <p class="text-sm leading-6 text-stone-400">
+                                    This architecture ensures every change in your thinking automatically updates your knowledge graph.
+                                </p>
+                            </div>
 
-                        <div class="flex justify-center overflow-x-auto rounded-[1.75rem] border border-white/10 bg-stone-950/70 p-3 sm:p-4 shadow-[0_0_60px_rgba(99,102,241,0.08)]">
-                            <pre class="mermaid min-h-[220px] w-full text-sm text-stone-200 sm:min-h-[300px] md:min-h-[360px]" id="thought-domain-event-flow"></pre>
-                        </div>
+                            <div class="flex justify-center overflow-x-auto rounded-[1.75rem] border border-white/10 bg-stone-950/70 p-3 sm:p-4 shadow-[0_0_60px_rgba(99,102,241,0.08)]">
+                                <div class="mermaid min-h-[220px] w-full text-sm text-stone-200 sm:min-h-[300px] md:min-h-[360px]" id="thought-domain-event-flow"></div>
+                            </div>
+                        </section>
                     </section>
-                </section>
+                </main>
             </div>
         </div>
-        <script type="module" src="{{ asset('js/architecture-diagrams.js') }}"></script>
     </body>
 </html>

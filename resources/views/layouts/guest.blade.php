@@ -63,7 +63,6 @@
             </div>
         </main>
         <script src="{{ asset('js/auth-ui.js') }}" defer></script>
-        <script type="module" src="{{ asset('js/architecture-diagrams.js') }}"></script>
         @stack('scripts')
     </body>
 </html>
