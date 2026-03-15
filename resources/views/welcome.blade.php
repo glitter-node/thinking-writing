@@ -119,7 +119,7 @@
                         <div class="grid gap-6 xl:grid-cols-3">
                             <article class="glass-panel overflow-hidden p-4">
                                 <div class="overflow-hidden rounded-[1.5rem] border border-white/10 bg-stone-950/70">
-                                    <img src="{{ asset('img/ThoughtGraph.png') }}" alt="ThinkWrite graph view preview" class="h-64 w-full object-cover object-top" />
+                                    <img src="{{ asset('img/ThoughtGraph.png') }}" alt="ThinkWrite graph view preview" class="h-64 min-h-[16rem] w-full object-cover object-top md:h-64" />
                                 </div>
                                 <div class="mt-4 space-y-2">
                                     <p class="text-xs uppercase tracking-[0.28em] text-orange-200">Graph View</p>
@@ -131,11 +131,16 @@
                             <article class="glass-panel overflow-hidden p-4">
                                 <div class="rounded-[1.5rem] border border-white/10 bg-stone-950/70 p-4">
                                     <div class="relative h-64 overflow-hidden rounded-[1.25rem] border border-cyan-300/10 bg-[radial-gradient(circle_at_20%_20%,_rgba(45,212,191,0.16),_transparent_22%),radial-gradient(circle_at_80%_30%,_rgba(251,146,60,0.14),_transparent_20%),linear-gradient(180deg,_rgba(24,24,27,0.95),_rgba(12,10,9,0.95))]">
-                                        <div class="absolute left-[8%] top-[16%] w-32 rounded-2xl border border-white/10 bg-stone-900/85 p-3 text-sm text-stone-200 shadow-lg shadow-black/20">Map the argument</div>
-                                        <div class="absolute right-[10%] top-[26%] w-36 rounded-2xl border border-white/10 bg-stone-900/85 p-3 text-sm text-stone-200 shadow-lg shadow-black/20">Open question</div>
-                                        <div class="absolute bottom-[16%] left-[28%] w-40 rounded-2xl border border-white/10 bg-stone-900/85 p-3 text-sm text-stone-200 shadow-lg shadow-black/20">Possible synthesis</div>
-                                        <div class="absolute left-[30%] top-[32%] h-px w-24 -rotate-12 bg-cyan-300/40"></div>
-                                        <div class="absolute right-[31%] top-[52%] h-px w-20 rotate-[18deg] bg-orange-300/40"></div>
+                                        <div class="absolute inset-0 flex items-center justify-center overflow-hidden px-2 py-3">
+                                            <div class="origin-center scale-75 transform sm:scale-90 md:scale-100">
+                                                {{-- Keep these coordinate utilities in Blade so Tailwind includes them in production builds. --}}
+                                                <div class="relative h-64 w-80 sm:w-[22rem] md:w-full">
+                                                    <div class="absolute left-[8%] top-[16%] w-28 max-w-[8rem] rounded-2xl border border-white/10 bg-stone-900/85 p-3 text-xs leading-5 text-stone-200 shadow-lg shadow-black/20 sm:w-32 sm:max-w-[8.5rem] sm:text-sm sm:leading-6 break-words">Map the argument</div>
+                                                    <div class="absolute right-[10%] top-[26%] w-32 max-w-[8.5rem] rounded-2xl border border-white/10 bg-stone-900/85 p-3 text-xs leading-5 text-stone-200 shadow-lg shadow-black/20 sm:w-36 sm:max-w-[9rem] sm:text-sm sm:leading-6 break-words">Open question</div>
+                                                    <div class="absolute bottom-[16%] left-[28%] w-36 max-w-[10rem] rounded-2xl border border-white/10 bg-stone-900/85 p-3 text-xs leading-5 text-stone-200 shadow-lg shadow-black/20 sm:w-40 sm:max-w-[10rem] sm:text-sm sm:leading-6 break-words">Possible synthesis</div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="mt-4 space-y-2">
@@ -147,7 +152,7 @@
 
                             <article class="glass-panel overflow-hidden p-4">
                                 <div class="rounded-[1.5rem] border border-white/10 bg-stone-950/70 p-4">
-                                    <div class="grid h-64 gap-3 md:grid-cols-3">
+                                    <div class="grid min-h-[16rem] gap-3 sm:grid-cols-2 md:h-64 md:grid-cols-3">
                                         @foreach ([
                                             'Inbox' => [['Capture founder note', 'high'], ['Tag edge cases', 'medium']],
                                             'Shaping' => [['Draft synthesis', 'high'], ['Review links', 'low']],
@@ -197,7 +202,7 @@
                         </div>
                     </div>
 
-                    <section class="glass-panel space-y-5 p-6">
+                    <section class="glass-panel space-y-4 p-4 sm:space-y-5 sm:p-6">
                         <div class="max-w-3xl space-y-3">
                             <p class="text-xs uppercase tracking-[0.3em] text-stone-500">Architecture</p>
                             <h2 class="font-['Space_Grotesk'] text-3xl font-bold text-stone-50 sm:text-4xl">Thought Domain Event Architecture</h2>
@@ -209,8 +214,8 @@
                             </p>
                         </div>
 
-                        <div class="flex justify-center overflow-x-auto rounded-[1.75rem] border border-white/10 bg-stone-950/70 p-4 shadow-[0_0_60px_rgba(99,102,241,0.08)]">
-                            <pre class="mermaid min-h-[360px] w-full text-sm text-stone-200" id="thought-domain-event-flow"></pre>
+                        <div class="flex justify-center overflow-x-auto rounded-[1.75rem] border border-white/10 bg-stone-950/70 p-3 sm:p-4 shadow-[0_0_60px_rgba(99,102,241,0.08)]">
+                            <pre class="mermaid min-h-[220px] w-full text-sm text-stone-200 sm:min-h-[300px] md:min-h-[360px]" id="thought-domain-event-flow"></pre>
                         </div>
                     </section>
                 </section>

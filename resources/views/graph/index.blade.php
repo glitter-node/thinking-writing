@@ -26,7 +26,7 @@
         </div>
 
         <div class="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
-            <section class="glass-panel overflow-hidden p-0">
+            <section class="glass-panel overflow-visible p-0">
                 <div class="border-b border-white/10 px-6 py-4">
                     <p class="text-xs uppercase tracking-[0.26em] text-stone-500">Cytoscape canvas</p>
                     <h2 class="mt-2 font-['Space_Grotesk'] text-2xl font-bold text-stone-50">Thought network</h2>
@@ -71,7 +71,7 @@
                         </label>
                     </div>
                 </div>
-                <div class="relative min-h-[620px] bg-[radial-gradient(circle_at_top,_rgba(251,146,60,0.14),_transparent_30%),linear-gradient(180deg,rgba(12,10,9,0.88),rgba(28,25,23,0.96))]">
+                <div class="relative min-h-[420px] overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(251,146,60,0.14),_transparent_30%),linear-gradient(180deg,rgba(12,10,9,0.88),rgba(28,25,23,0.96))] sm:min-h-[520px] md:min-h-[620px]">
                     <div
                         id="graph"
                         data-graph-url="{{ $graphApiUrl }}"
@@ -84,7 +84,7 @@
                         data-path-route-url="{{ route('graph.path', ['space' => $currentSpace->id]) }}"
                         data-initial-path-from="{{ $selectedFromThought?->id }}"
                         data-initial-path-to="{{ $selectedToThought?->id }}"
-                        class="h-[620px] w-full"
+                        class="h-[55vh] min-h-[420px] w-full max-h-[780px] sm:h-[60vh] md:h-[620px]"
                     ></div>
                 </div>
             </section>

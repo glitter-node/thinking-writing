@@ -44,9 +44,13 @@ const createGraph = async () => {
     const pathButton = document.getElementById('graph-path-submit');
 
     let isFocused = false;
+    let resizeFrame = null;
+    let resizeObserver = null;
+    let resizing = false;
 
     const cy = cytoscape({
         container,
+        pixelRatio: 'auto',
         elements: [],
         layout: {
             name: 'cose',
@@ -207,6 +211,20 @@ const createGraph = async () => {
         }
     };
 
+    const scheduleResize = (fit = false) => {
+        if (resizeFrame) {
+            window.cancelAnimationFrame(resizeFrame);
+        }
+
+        resizeFrame = window.requestAnimationFrame(() => {
+            cy.resize();
+
+            if (fit && cy.nodes().length > 0) {
+                cy.fit(cy.elements(), 24);
+            }
+        });
+    };
+
     const highlightPath = async (path, edges = []) => {
         clearPathHighlight();
 
@@ -361,6 +379,28 @@ const createGraph = async () => {
     pathButton?.addEventListener('click', async () => {
         await loadPath();
     });
+
+    resizeObserver = new ResizeObserver(() => {
+        if (resizing) {
+            return;
+        }
+
+        resizing = true;
+        scheduleResize(true);
+
+        window.requestAnimationFrame(() => {
+            resizing = false;
+        });
+    });
+    resizeObserver.observe(container);
+
+    window.addEventListener('orientationchange', () => {
+        scheduleResize(true);
+    }, { passive: true });
+
+    window.addEventListener('resize', () => {
+        scheduleResize(false);
+    }, { passive: true });
 
     if (initialPathFrom && initialPathTo) {
         if (pathFromSelect) {

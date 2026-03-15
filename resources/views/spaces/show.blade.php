@@ -66,8 +66,8 @@
                     </form>
                 </section>
 
-                <section class="pb-4 md:overflow-x-auto">
-                    <div class="grid gap-5 md:flex md:min-w-max">
+                <section class="overflow-x-auto overscroll-x-contain pb-4">
+                    <div class="flex min-w-max gap-5">
                         @forelse ($space->streams as $stream)
                             <x-spaces.board.stream-column :stream="$stream" :search="$search" />
                         @empty

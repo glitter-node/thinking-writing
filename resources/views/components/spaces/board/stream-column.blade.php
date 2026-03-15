@@ -1,6 +1,6 @@
 @props(['stream', 'search'])
 
-<div class="glass-panel flex w-full min-w-0 flex-col p-4 md:w-[360px] md:shrink-0">
+<div class="glass-panel flex w-[min(20rem,85vw)] min-w-[18rem] shrink-0 flex-col p-4 md:w-[360px]">
     <div x-data="{ editStream: false }" class="mb-4">
         <div class="flex items-start justify-between gap-3">
             <div>

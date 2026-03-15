@@ -3,6 +3,9 @@
 <article id="thought-{{ $thought->id }}" data-thought-card data-thought-id="{{ $thought->id }}" data-raw-content="{{ $thought->content }}" data-move-url="{{ route('thoughts.move', $thought) }}" x-data="{ editing: false }" class="rounded-[1.7rem] border border-white/10 bg-stone-950/80 p-4 shadow-lg shadow-black/20">
     <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div class="flex flex-wrap items-center gap-2">
+            <button type="button" data-drag-handle class="inline-flex cursor-grab items-center rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-stone-300 active:cursor-grabbing">
+                Drag
+            </button>
             <span class="priority-pill {{ $thought->priority === 'high' ? 'bg-rose-400/15 text-rose-200' : ($thought->priority === 'medium' ? 'bg-amber-300/15 text-amber-200' : 'bg-teal-300/15 text-teal-200') }}">
                 {{ $thought->priority }}
             </span>
@@ -25,7 +28,7 @@
         </div>
     </div>
 
-    <p data-thought-content-display class="mt-4 whitespace-pre-line text-sm leading-6 text-stone-100">{{ $thought->content }}</p>
+    <p data-thought-content-display class="mt-4 break-words whitespace-pre-line text-sm leading-6 text-stone-100">{{ $thought->content }}</p>
 
     <div class="mt-4 flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-stone-500">
         <span>thought</span>

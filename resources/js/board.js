@@ -39,6 +39,12 @@ const mountSortable = (element) => {
         animation: 150,
         ghostClass: 'thought-ghost',
         dragClass: 'thought-dragging',
+        handle: '[data-drag-handle]',
+        forceFallback: false,
+        fallbackOnBody: true,
+        fallbackTolerance: 8,
+        delayOnTouchOnly: true,
+        delay: 120,
         onEnd: async (event) => {
             const item = event.item;
             const moveUrl = item.dataset.moveUrl;

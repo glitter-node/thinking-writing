@@ -52,7 +52,7 @@
                     </div>
                 </div>
 
-                <div x-ref="surface" class="relative min-h-[760px] overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.12),_transparent_30%),radial-gradient(circle_at_bottom,_rgba(251,146,60,0.14),_transparent_26%),linear-gradient(180deg,rgba(12,10,9,0.88),rgba(28,25,23,0.98))]">
+                <div x-ref="surface" class="relative min-h-[520px] overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.12),_transparent_30%),radial-gradient(circle_at_bottom,_rgba(251,146,60,0.14),_transparent_26%),linear-gradient(180deg,rgba(12,10,9,0.88),rgba(28,25,23,0.98))] sm:min-h-[640px] lg:min-h-[760px]">
                     <div x-ref="viewport" class="absolute inset-0 origin-top-left transition-transform duration-150 ease-out">
                         <svg class="absolute inset-0 h-full w-full">
                             <template x-for="edge in edges" :key="edge.id">
@@ -69,14 +69,14 @@
 
                         <template x-for="node in nodes.filter((item) => item.kind === 'thought')" :key="node.id">
                             <article
-                                class="absolute w-56 cursor-move rounded-3xl border bg-stone-950/90 p-4 shadow-[0_24px_60px_rgba(0,0,0,0.35)] transition"
+                                class="absolute w-48 max-w-[calc(100vw-5rem)] cursor-move rounded-3xl border bg-stone-950/90 p-4 shadow-[0_24px_60px_rgba(0,0,0,0.35)] transition sm:w-56 sm:max-w-none"
                                 :class="selectedNodeIds.includes(node.resource_id) ? 'border-orange-300/60 ring-2 ring-orange-300/25' : 'border-white/10'"
                                 :style="`left:${node.x}px; top:${node.y}px;`"
                                 x-on:mousedown.prevent="startDrag(node, $event)"
                                 x-on:click.shift.prevent="toggleSelection(node.resource_id)"
                             >
                                 <p class="text-[11px] uppercase tracking-[0.24em] text-stone-500" x-text="node.stream_title"></p>
-                                <p class="mt-3 text-sm leading-6 text-stone-100" x-text="node.content"></p>
+                                <p class="mt-3 break-words text-sm leading-6 text-stone-100" x-text="node.content"></p>
                                 <div class="mt-4 flex items-center justify-between gap-3">
                                     <span class="rounded-full border border-white/10 px-2 py-1 text-[10px] uppercase tracking-[0.2em] text-stone-300">Thought</span>
                                     <a :href="node.href" class="text-xs font-semibold text-orange-200">Open</a>

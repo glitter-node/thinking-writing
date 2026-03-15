@@ -23,6 +23,7 @@ Alpine.data('thoughtCanvas', (config) => ({
     panX: 0,
     panY: 0,
     zoom: 1,
+    nodePadding: 16,
     init() {
         this.$nextTick(() => {
             this.render();
@@ -68,6 +69,22 @@ Alpine.data('thoughtCanvas', (config) => ({
 
         return `M ${source.x} ${source.y} L ${target.x} ${target.y}`;
     },
+    nodeWidth() {
+        const surfaceWidth = this.$refs.surface?.clientWidth ?? 1024;
+
+        return surfaceWidth < 640 ? 192 : 224;
+    },
+    clampPosition(x, y) {
+        const surfaceWidth = this.$refs.surface?.clientWidth ?? 1400;
+        const surfaceHeight = this.$refs.surface?.clientHeight ?? 840;
+        const maxX = Math.max(this.nodePadding, surfaceWidth - this.nodeWidth() - this.nodePadding);
+        const maxY = Math.max(this.nodePadding, surfaceHeight - 120 - this.nodePadding);
+
+        return {
+            x: Math.max(this.nodePadding, Math.min(Math.round(x), maxX)),
+            y: Math.max(this.nodePadding, Math.min(Math.round(y), maxY)),
+        };
+    },
     startDrag(node, event) {
         if (node.kind !== 'thought') {
             return;
@@ -104,8 +121,9 @@ Alpine.data('thoughtCanvas', (config) => ({
             const thought = this.nodes.find((item) => item.resource_id === position.thoughtId && item.kind === 'thought');
 
             if (thought) {
-                thought.x = Math.round(position.x + deltaX);
-                thought.y = Math.round(position.y + deltaY);
+                const clamped = this.clampPosition(position.x + deltaX, position.y + deltaY);
+                thought.x = clamped.x;
+                thought.y = clamped.y;
             }
         });
 
